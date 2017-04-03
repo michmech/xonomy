@@ -175,20 +175,20 @@
 #xonomyBubbleContent .warning { padding: 5px 10px; }
 
 /*LAIC MODE*/
-.xonomy.laic { font-family: sans-serif; font-size: 1rem; cursor: default; background-color: #ffffff;
+.xonomy.laic { font-family: Verdana, sans-serif; font-size: 1rem; cursor: default; background-color: #ffffff;
 	-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
 	line-height: 1.5em; padding-left: 5px; }
 .xonomy.laic * { position: relative; }
 .xonomy.laic .element .punc { display: none; }
 .xonomy.laic .element { display: block; border-top: 1px solid #cccccc; margin: 10px 0px; padding: 0px 0px 0px 40px; }
 .xonomy.laic .element > .children > .textnode { display: block; margin: 10px 0px; }
-.xonomy.laic .element > .children > .textnode > .value { display: block; font-family: monospace; background-color: #eeeeee; padding: 5px 10px; border: 1px inset #999999; border-radius: 4px; }
+.xonomy.laic .element > .children > .textnode > .value { display: block; font-family: monospace; background-color: #eeeeee; padding: 5px 10px; border: 1px inset #999999; border-radius: 4px; cursor: pointer; }
 .xonomy.laic .element > .tag.closing { display: none; }
 .xonomy.laic .element > .tag { display: block; margin: 10px 0px; padding: 5px 10px; border-radius: 4px; }
-.xonomy.laic .element > .tag > .name {font-weight: bold; color: #315696; }
-.xonomy.laic .element > .tag.opening > .attributes > .attribute { margin-left: 1em; border-left: 1px solid #cccccc; padding-left: 1em;}
-.xonomy.laic .element > .tag.opening > .attributes > .attribute > .name { font-weight: bold; color: #6385bf; }
-.xonomy.laic .element > .tag.opening > .attributes > .attribute > .valueContainer { display: inline; background-color: #eeeeee; padding: 2px 10px; border: 1px inset #999999; margin-left: 10px; font-family: monospace; font-size: 1rem; border-radius: 2px; color: #883737; }
+.xonomy.laic .element > .tag > .name {font-weight: bold; color: #315696; cursor: pointer; }
+.xonomy.laic .element > .tag.opening > .attributes > .attribute { margin-left: 0.5em; border-left: 1px solid #cccccc; padding-left: 0.5em;}
+.xonomy.laic .element > .tag.opening > .attributes > .attribute > .name { font-weight: bold; color: #6385bf; cursor: pointer; }
+.xonomy.laic .element > .tag.opening > .attributes > .attribute > .valueContainer { display: inline; background-color: #eeeeee; padding: 2px 10px; border: 1px inset #999999; margin-left: 10px; font-family: monospace; font-size: 1rem; border-radius: 2px; cursor: pointer; }
 .xonomy.laic .element > .children > .textnode > .value > .insertionPoint { display: none; }
 .xonomy.laic .element > .children > .textnode > .value > .dots { display: none; }
 
@@ -222,8 +222,10 @@
 .xonomy.laic .element.hasText .element {border: 0px; }
 .xonomy.laic .element.hasInlineMenu > .children {background-color: #eeeeee; padding: 10px 10px; border: 1px inset #999999; border-radius: 4px; line-height: 2em; }
 .xonomy.laic .element.hasInlineMenu .element {display: inline;}
-.xonomy.laic .element.hasInlineMenu .element > .tag.opening {display: inline; background-color: #ffffff; border-radius: 20px 0px 0px 20px; margin: 0px; }
-.xonomy.laic .element.hasInlineMenu .element > .tag.closing {display: inline; background-color: #ffffff; border-radius: 0px 20px 20px 0px;}
+.xonomy.laic .element.hasInlineMenu .element > .tag.opening {display: inline; background-color: #ffffff; border-radius: 20px 0px 0px 20px; margin: 0px; padding: 5px 5px 5px 10px; }
+.xonomy.laic .element.hasInlineMenu .element > .tag.closing {display: inline; background-color: #ffffff; border-radius: 0px 20px 20px 0px; margin: 0px; padding: 5px 10px 5px 2px;}
+.xonomy.laic .element.hasInlineMenu .element > .tag.opening > .name {margin-right: 5px;}
+.xonomy.laic .element.hasInlineMenu .element > .tag.closing > .name {margin-left: 5px;}
 .xonomy.laic .element.hasInlineMenu .element > .children {display: inline; }
 .xonomy.laic .element.hasInlineMenu .textnode {display: inline; border: 0px; margin: 0px; padding: 0px; }
 .xonomy.laic .element.hasInlineMenu .textnode .value {display: inline; border: 0px; padding: 0px; }
@@ -231,4 +233,75 @@
 .xonomy.laic .element.hasInlineMenu .element .childrenCollapsed { display: none; position: relative; top: auto; right: auto; }
 .xonomy.laic .element.hasInlineMenu .element.collapsed .childrenCollapsed {display: inline;}
 .xonomy.laic .element.hasInlineMenu .element > .connector > .plusminus { top: 3px; }
-.xonomy.laic .element.hasInlineMenu .element .name {padding: 0px 5px; }
+.xonomy.laic .element.hasInlineMenu .element .name {padding: 2px 5px; }
+.xonomy.laic .element.hasInlineMenu .element > .tag.opening .attribute .valueContainer { padding: 0px 5px !important; }
+
+/*Clickable items: hover state*/
+.xonomy.laic .element > .tag > .name:hover { color: #6385bf; }
+.xonomy.laic .element > .tag.opening > .attributes > .attribute > .name:hover { color: #819bc7; }
+.xonomy.laic .element > .tag.opening > .attributes > .attribute > .valueContainer:hover  { background-color: #f6f3e6; }
+.xonomy.laic .element > .children > .textnode > .value:hover { color: #666666; background-color: #f6f3e6; }
+.xonomy.laic .element > .children > .textnode.whitespace > .value:hover { background-color: #f6f3e6; }
+
+/*Clickable items: current state*/
+.xonomy.laic .element.current > .tag > .name { background-color: #ffff99; }
+.xonomy.laic .element > .tag.opening > .attributes > .attribute.current > .name { background-color: #ffff99; }
+.xonomy.laic .element > .tag.opening > .attributes > .attribute > .valueContainer.current { background-color: #ffffcc; }
+.xonomy.laic .element > .children > .textnode.current > .value { background-color: #ffffcc; }
+
+/*Empty text nodes: */
+.xonomy.laic .element .children .textnode.empty { min-height: 1em; }
+.xonomy.laic .element .children .textnode.empty .value { cursor: pointer; }
+.xonomy.laic .element .children .textnode.empty .value > .insertionPoint { display: inline; padding: 0px 2px; border-top: 1px solid #dddddd; border-bottom: 1px solid #dddddd; }
+.xonomy.laic .element .children .textnode.empty .value > .insertionPoint > .inside { border-left: 1px solid #dddddd; }
+.xonomy.laic .element .children .textnode.empty .value:hover { background-color: #f6f3e6; }
+.xonomy.laic .element .children .textnode.empty .value:focus { background-color: #ffffcc; }
+
+/*Drag handle*/
+.xonomy.laic .connector > .draghandle { display: none; width: 9px; height: 13px; background-image: url(draghandle.gif); position: absolute; top: 36px; right: 0px; cursor: move; }
+.xonomy.laic .element.draggable > .connector > .draghandle { display: block; }
+.xonomy.laic .element.readonly .element .draghandle { display: none; }
+.xonomy.laic .element.hasText .element .connector .draghandle { display: none; }
+
+/*Classes involved in dragging and dropping*/
+.xonomy.laic .dragging { color: #cccccc !important; }
+.xonomy.laic .dragging * { color: #cccccc !important; }
+.xonomy.laic .dragging .draghandle { opacity: 0.5; }
+.xonomy.laic .elementDropper { display: block; margin-top: 0px; margin-bottom: 0px; height: 0px; position: relative; }
+.xonomy.laic .elementDropper > .inside { display: block; height: 9px; width: 9px; border: 1px solid #ffffff; background-color: #6fbb93; position: absolute; top: -5px; left: -10px; z-index: 10; }
+.xonomy.laic .elementDropper:first-child > .inside { top: -4px;  }
+.xonomy.laic .elementDropper:only-child > .inside { top: -5px;  }
+.xonomy.laic .activeDropper > .inside { background-color: #888888; }
+
+/*Chewed selectable text*/
+.xonomy.laic .element > .children > .textnode .char { }
+.xonomy.laic .element > .children > .textnode .word { white-space: nowrap; }
+.xonomy.laic .hasInlineMenu > .children > .textnode .char > .selector { position: absolute; left: 0px; right: 0px; bottom: -7px; height: 1px; background-color: #eeeeee; z-index: 2; }
+.xonomy.laic .hasInlineMenu > .children > .textnode .char > .selector > .inside { position: absolute; left: 0px; right: 0px; bottom: -3px; top: -3px; background-color: transparent; }
+.xonomy.laic .hasInlineMenu > .children > .textnode .char > .selector > .inside:hover { background-color: #00cc00; }
+.xonomy.laic .element > .children > .textnode .char.on { background-color: #ffff99; }
+.xonomy.laic .element > .children > .textnode .char.on > .selector { position: absolute; left: 0px; right: 0px; z-index: 2; background-color: #00cc00; height: 3px; bottom: -7px; }
+.xonomy.laic .element > .children > .textnode .char.on > .selector > .inside { position: absolute; left: 0px; right: 0px; top: -2px; bottom: -1px; background-color: transparent; }
+
+/*The exclamation mark that lets you know if there is a warning attached to an element or attribute*/
+.xonomy.laic .warner { display: none; width: 16px; margin: 0px 5px 0px 1px; }
+.xonomy.laic .warner .inside { position: absolute; bottom: -4px; left: 0px; background-image: url(exclamation.png); background-position: 0px 0px; width: 16px; height: 16px; cursor: pointer; }
+.xonomy.laic .element.invalid > .tag > .warner { display: inline-block; }
+.xonomy.laic .attribute.invalid > .warner { display: inline-block; }
+
+/*Read-only stuff*/
+.xonomy.laic .readonly * { color: #aaaaaa !important; cursor: default !important; }
+.xonomy.laic .element.readonly.draggable > .connector > .draghandle { cursor: move !important; }
+.xonomy.laic .element.readonly .warner .inside { cursor: pointer !important; }
+.xonomy.laic .readonly .plusminus { cursor: pointer !important; }
+.xonomy.laic .readonly .childrenCollapsed { cursor: pointer !important; }
+.xonomy.laic .readonly .textnode .char > .selector > .inside:hover { background-color: transparent !important; }
+.xonomy.laic .invisible { display: none; }
+
+.xonomy.laic .attribute.shy { display: none; }
+.xonomy.laic .rollouter { background-color: #eeeeee; border-radius: 10px; margin: 0px 4px; background-image: url(bullet_arrow_down.png); background-position: center center; background-repeat: no-repeat; padding: 0px 8px; height: 16px; cursor: pointer; }
+.xonomy.laic .rollouter.rolledout { background-image: url(bullet_arrow_up.png);  }
+.xonomy.laic .rollouter:hover { background-color: #ffff99; }
+.xonomy.laic .element > .tag.opening > .attributes.rolledout { display: block; padding: 0px 0px 5px 15px; border-left: 1px dotted #cccccc; margin: 0px 0px 0px 10px; line-height: 2em;}
+.xonomy.laic .element > .tag.opening > .attributes.rolledout > .attribute { display: block; border: 0px; padding: 0px; margin: 5px 0px; }
+.xonomy.laic .element > .tag.opening > .attributes.rolledout > .attribute.invisible { display: none; }
