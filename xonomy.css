@@ -1,186 +1,153 @@
-﻿.xonomy { font-family: monospace; font-size: 1rem; cursor: default; background-color: #ffffff;
+/*NERD MODE*/
+.xonomy.nerd { font-family: monospace; font-size: 1rem; cursor: default; background-color: #ffffff;
 	-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
 	line-height: 1.5em; padding-left: 5px; }
-.xonomy * { position: relative; }
-.xonomy.laic { line-height: 2em; }
-.xonomy.laic > .element { border-bottom: 1px dotted #cccccc; }
-.xonomy.laic > .element.noChildren { padding-bottom: 5px; }
-.xonomy.laic > .element.collapsed { padding-bottom: 5px; }
+.xonomy.nerd * { position: relative; }
 
 /*Inline formatting of names, values, punctuation*/
-.xonomy .element .punc { color: #669acc; z-index: 1;  }
-.xonomy .element > .tag { border-radius: 2px; }
-.xonomy .element > .tag.opening {  }
-.xonomy .element > .tag.opening > .punc.slash { display: none; }
-.xonomy .element > .tag.closing {  }
-.xonomy .element > .tag > .name { color: #cc3333; cursor: pointer; }
-.xonomy .element > .tag.opening > .attributes {  }
-.xonomy .element > .tag.opening > .attributes > .attribute {  }
-.xonomy .element > .tag.opening > .attributes > .attribute > .name { color: #ff4455; cursor: pointer; }
-.xonomy .element > .tag.opening > .attributes > .attribute > .valueContainer { cursor: pointer; }
-.xonomy .element > .tag.opening > .attributes > .attribute > .valueContainer > .value { color: #666666; }
-.xonomy .element > .children > .textnode > .value { color: #000000; cursor: pointer; line-height: 2em; }
-.xonomy .element > .children > .textnode > .value > .insertionPoint { display: none; }
-.xonomy .element > .children > .textnode > .value > .dots { display: none; }
-.xonomy.laic .element > .tag.closing { display: none; }
-.xonomy.laic .element > .tag { background-color: #f6f6f6; padding: 3px 0px 3px 0px; border: 1px solid #aaaaaa; border-radius: 2px; box-shadow: 0px 0px 1px #cccccc; }
-.xonomy.laic .element > .tag.opening { margin: 0px 10px 0px 0px;  }
-.xonomy.laic .element > .tag.closing { margin: 0px 0px 0px 10px;  }
-.xonomy.laic .element > .tag.closing { display: none; }
-.xonomy.laic .element.hasText .element.hasText.oneliner > .tag.opening { display: inline; margin-right: 0px; }
-.xonomy.laic .element.hasText .element.hasText.oneliner > .tag { padding-top: 0px !important; padding-bottom: 0px !important; }
-.xonomy.laic .element.hasText .element.hasText.oneliner > .tag * { padding-top: 0px !important; padding-bottom: 0px !important; }
-.xonomy.laic .element.hasText .element.hasText.oneliner > .children { margin-left: 2px; padding: 0px 5px; background-color: #eeeeee; border: 1px solid #aaaaaa; border-radius: 2px; }
-.xonomy.laic .element > .tag > .name { padding: 3px 10px 3px 10px; }
-.xonomy.laic .element > .tag .punc { display: none !important; }
-.xonomy.laic .element > .tag.opening > .attributes > .attribute { margin: 0px 0px 0px 0px; padding: 3px 0px 3px 0px; border-left: 1px solid #aaaaaa; }
-.xonomy.laic .element > .tag.opening > .attributes > .attribute > .name { padding: 3px 10px; margin: 0px 0px 0px 0px;  }
-.xonomy.laic .element > .tag.opening > .attributes > .attribute > .valueContainer { background-color: #ffffff; min-width: 1em; padding: 3px 10px 3px 10px; xbox-shadow: inset 0px 0px 3px #666666; }
-.xonomy.laic .element > .tag.opening > .attributes > .attribute > .valueContainer:hover { background-color: #ffffcc; }
-.xonomy.laic .element > .children > .textnode > .value { text-shadow: 1px 1px 0px #f0f0f0; }
-.xonomy.laic .element > .children > .textnode > .value:hover { background-color: #ffffcc; }
+.xonomy.nerd .element .punc { color: #669acc; z-index: 1;  }
+.xonomy.nerd .element > .tag { border-radius: 2px; }
+.xonomy.nerd .element > .tag.opening {  }
+.xonomy.nerd .element > .tag.opening > .punc.slash { display: none; }
+.xonomy.nerd .element > .tag.closing {  }
+.xonomy.nerd .element > .tag > .name { color: #cc3333; cursor: pointer; }
+.xonomy.nerd .element > .tag.opening > .attributes {  }
+.xonomy.nerd .element > .tag.opening > .attributes > .attribute {  }
+.xonomy.nerd .element > .tag.opening > .attributes > .attribute > .name { color: #ff4455; cursor: pointer; }
+.xonomy.nerd .element > .tag.opening > .attributes > .attribute > .valueContainer { cursor: pointer; }
+.xonomy.nerd .element > .tag.opening > .attributes > .attribute > .valueContainer > .value { color: #666666; }
+.xonomy.nerd .element > .children > .textnode > .value { color: #000000; cursor: pointer; line-height: 2em; }
+.xonomy.nerd .element > .children > .textnode > .value > .insertionPoint { display: none; }
+.xonomy.nerd .element > .children > .textnode > .value > .dots { display: none; }
 
 /*Clickable items: hover state*/
-.xonomy .element > .tag > .name:hover { color: #00cc00; }
-.xonomy .element > .tag.opening > .attributes > .attribute > .name:hover { color: #00cc00; }
-.xonomy .element > .tag.opening > .attributes > .attribute > .valueContainer:hover > .value { color: #00cc00; }
-.xonomy .element > .children > .textnode > .value:hover { color: #666666; }
-.xonomy .element > .children > .textnode.whitespace > .value:hover { background-color: #f2f2f2; }
+.xonomy.nerd .element > .tag > .name:hover { color: #00cc00; }
+.xonomy.nerd .element > .tag.opening > .attributes > .attribute > .name:hover { color: #00cc00; }
+.xonomy.nerd .element > .tag.opening > .attributes > .attribute > .valueContainer:hover > .value { color: #00cc00; }
+.xonomy.nerd .element > .children > .textnode > .value:hover { color: #666666; }
+.xonomy.nerd .element > .children > .textnode.whitespace > .value:hover { background-color: #f2f2f2; }
 
 /*Clickable items: current state*/
-.xonomy .element.current > .tag > .name { background-color: #ffff99; color: #00cc00; padding: 0px 3px; margin: 0px -3px; border-radius: 2px; }
-.xonomy .element > .tag.opening > .attributes > .attribute.current > .name { background-color: #ffff99; color: #00cc00; padding: 0px 3px; margin: 0px -3px; border-radius: 2px; }
-.xonomy .element > .tag.opening > .attributes > .attribute > .valueContainer.current { background-color: #ffff99; padding: 0px 3px; margin: 0px -3px; border-radius: 2px; }
-.xonomy .element > .tag.opening > .attributes > .attribute > .valueContainer.current > .value { color: #00cc00; border-radius: 2px; }
-.xonomy .element > .children > .textnode.current > .value { background-color: #ffff99 !important; color: #00cc00; padding: 0px 3px; margin: 0px -3px; border-radius: 2px; }
-.xonomy.laic .element.current > .tag > .name { background-color: #ffff99; color: #00cc00; padding: 3px 10px 3px 10px; margin: 0px; border-radius: 0px; }
-.xonomy.laic .element > .tag.opening > .attributes > .attribute.current > .name { background-color: #ffff99; color: #00cc00; padding: 3px 10px; margin: 0px 0px 0px 0px; border-radius: 0px; }
-.xonomy.laic .element > .tag.opening > .attributes > .attribute > .valueContainer.current { background-color: #ffff99; padding: 3px 10px 3px 10px; margin: 0px; border-radius: 0px; }
-
-.xonomy.laic .element > .children > .textnode.whitespace:only-child > .value { padding: 0px 20px; border-bottom: 1px dotted #999999; }
-.xonomy.laic .element > .children > .textnode.whitespace:only-child > .value * { display: none; }
-
+.xonomy.nerd .element.current > .tag > .name { background-color: #ffff99; color: #00cc00; padding: 0px 3px; margin: 0px -3px; border-radius: 2px; }
+.xonomy.nerd .element > .tag.opening > .attributes > .attribute.current > .name { background-color: #ffff99; color: #00cc00; padding: 0px 3px; margin: 0px -3px; border-radius: 2px; }
+.xonomy.nerd .element > .tag.opening > .attributes > .attribute > .valueContainer.current { background-color: #ffff99; padding: 0px 3px; margin: 0px -3px; border-radius: 2px; }
+.xonomy.nerd .element > .tag.opening > .attributes > .attribute > .valueContainer.current > .value { color: #00cc00; border-radius: 2px; }
+.xonomy.nerd .element > .children > .textnode.current > .value { background-color: #ffff99 !important; color: #00cc00; padding: 0px 3px; margin: 0px -3px; border-radius: 2px; }
 
 /*Read-only stuff*/
-.xonomy .readonly * { color: #aaaaaa !important; cursor: default !important; }
-.xonomy .element.readonly.draggable > .connector > .draghandle { cursor: move !important; }
-.xonomy .element.readonly .warner .inside { cursor: pointer !important; }
-.xonomy .readonly .plusminus { cursor: pointer !important; }
-.xonomy .readonly .childrenCollapsed { cursor: pointer !important; }
-.xonomy .readonly .textnode .char > .selector > .inside:hover { background-color: transparent !important; }
-.xonomy .invisible { display: none; }
+.xonomy.nerd .readonly * { color: #aaaaaa !important; cursor: default !important; }
+.xonomy.nerd .element.readonly.draggable > .connector > .draghandle { cursor: move !important; }
+.xonomy.nerd .element.readonly .warner .inside { cursor: pointer !important; }
+.xonomy.nerd .readonly .plusminus { cursor: pointer !important; }
+.xonomy.nerd .readonly .childrenCollapsed { cursor: pointer !important; }
+.xonomy.nerd .readonly .textnode .char > .selector > .inside:hover { background-color: transparent !important; }
+.xonomy.nerd .invisible { display: none; }
 
-.xonomy .attribute.shy { display: none; }
-.xonomy .rollouter { background-color: #eeeeee; border-radius: 10px; margin: 0px 4px; background-image: url(bullet_arrow_down.png); background-position: center center; background-repeat: no-repeat; padding: 0px 8px; height: 16px; cursor: pointer; }
-.xonomy .rollouter.rolledout { background-image: url(bullet_arrow_up.png);  }
-.xonomy .rollouter:hover { background-color: #ffff99; }
-.xonomy .element > .tag.opening > .attributes.rolledout { display: block; padding: 0px 0px 5px 15px; border-left: 1px dotted #cccccc; margin: 0px 0px 0px 10px; }
-.xonomy .element > .tag.opening > .attributes.rolledout > .attribute { display: block; border: 0px; padding: 0px; margin: 0px; }
-.xonomy .element > .tag.opening > .attributes.rolledout > .attribute.invisible { display: none; }
-.xonomy.laic .element > .tag.opening > .attributes.rolledout { padding: 3px 0px 0px 15px;  }
+.xonomy.nerd .attribute.shy { display: none; }
+.xonomy.nerd .rollouter { background-color: #eeeeee; border-radius: 10px; margin: 0px 4px; background-image: url(bullet_arrow_down.png); background-position: center center; background-repeat: no-repeat; padding: 0px 8px; height: 16px; cursor: pointer; }
+.xonomy.nerd .rollouter.rolledout { background-image: url(bullet_arrow_up.png);  }
+.xonomy.nerd .rollouter:hover { background-color: #ffff99; }
+.xonomy.nerd .element > .tag.opening > .attributes.rolledout { display: block; padding: 0px 0px 5px 15px; border-left: 1px dotted #cccccc; margin: 0px 0px 0px 10px; }
+.xonomy.nerd .element > .tag.opening > .attributes.rolledout > .attribute { display: block; border: 0px; padding: 0px; margin: 0px; }
+.xonomy.nerd .element > .tag.opening > .attributes.rolledout > .attribute.invisible { display: none; }
 
 /*Block layout*/
-.xonomy .element { padding-left: 25px; margin-top: 5px; margin-bottom: 5px; }
-.xonomy .element .connector { border-top: 1px dotted #b6b6b6; width: 24px; height: 10px; position: absolute; top: 10px; left: 0px; }
-.xonomy .element .children { margin-left: 10px; border-left: 1px dotted #cccccc; padding-top: 1px; padding-bottom: 1px; }
-.xonomy .element .children .textnode { padding-left: 25px; margin-top: 5px; margin-bottom: 5px; }
-.xonomy.laic .element { margin-top: 5px; margin-bottom: 5px; border-top: 1px dotted #cccccc; padding-top: 5px; padding-left: 30px; }
-.xonomy.laic .element .children { border: 0px; padding-top: 0px; padding-bottom: 0px; margin-left: 0px; }
-.xonomy.laic .element .connector { border: 0px; top: 21px; left: 5px; }
+.xonomy.nerd .element { padding-left: 25px; margin-top: 5px; margin-bottom: 5px; }
+.xonomy.nerd .element .connector { border-top: 1px dotted #b6b6b6; width: 24px; height: 10px; position: absolute; top: 10px; left: 0px; }
+.xonomy.nerd .element .children { margin-left: 10px; border-left: 1px dotted #cccccc; padding-top: 1px; padding-bottom: 1px; }
+.xonomy.nerd .element .children .textnode { padding-left: 25px; margin-top: 5px; margin-bottom: 5px; }
 
 /*Inline layout (overrides block-layout default)*/
-.xonomy .element.hasText > .children > .element { padding-left: 0px; display: inline; }
-.xonomy .element.hasText .children .connector { position: relative; top: 0px; left: 0px; display: inline; padding-right: 16px; border: 0px; }
-.xonomy .element.hasText .children .element.uncollapsible .connector { padding-right: 0px; }
-.xonomy .element.hasText .children .element.noChildren .connector { padding-right: 0px; }
-.xonomy .textnode > .connector { display: none !important; }
-.xonomy .element.hasText .children { padding-left: 25px; padding-top: 5px; padding-bottom: 5px; }
-.xonomy .element.hasText .element.hasText .children { margin-left: 0px; border-left: 0px; padding: 0px; display: inline; }
-.xonomy .element.hasText .children .textnode { padding-left: 0px; display: inline; }
-.xonomy .element.oneliner .children .textnode .dots { display: none !important; }
-.xonomy.laic .element.hasText .element { border: 0px; }
-.xonomy.laic .element.hasText .children { padding-top: 5px; }
+.xonomy.nerd .element.hasText > .children > .element { padding-left: 0px; display: inline; }
+.xonomy.nerd .element.hasText .children .connector { position: relative; top: 0px; left: 0px; display: inline; padding-right: 16px; border: 0px; }
+.xonomy.nerd .element.hasText .children .element.uncollapsible .connector { padding-right: 0px; }
+.xonomy.nerd .element.hasText .children .element.noChildren .connector { padding-right: 0px; }
+.xonomy.nerd .textnode > .connector { display: none !important; }
+.xonomy.nerd .element.hasText .children { padding-left: 25px; padding-top: 5px; padding-bottom: 5px; }
+.xonomy.nerd .element.hasText .element.hasText .children { margin-left: 0px; border-left: 0px; padding: 0px; display: inline; }
+.xonomy.nerd .element.hasText .children .textnode { padding-left: 0px; display: inline; }
+.xonomy.nerd .element.oneliner .children .textnode .dots { display: none !important; }
 
 /*One-liner layout*/
-.xonomy .element.oneliner .element { padding-left: 0px; display: inline; }
-.xonomy .element.oneliner .children { margin-left: 0px; border-left: 0px; padding: 0px; display: inline; }
-.xonomy .element.oneliner .element.hasText .children { margin-left: 0px; border-left: 0px; padding: 0px; display: inline; }
-.xonomy .element.oneliner .children .textnode { padding-left: 0px; display: inline; }
+.xonomy.nerd .element.oneliner .element { padding-left: 0px; display: inline; }
+.xonomy.nerd .element.oneliner .children { margin-left: 0px; border-left: 0px; padding: 0px; display: inline; }
+.xonomy.nerd .element.oneliner .element.hasText .children { margin-left: 0px; border-left: 0px; padding: 0px; display: inline; }
+.xonomy.nerd .element.oneliner .children .textnode { padding-left: 0px; display: inline; }
 
 /*Empty text nodes: */
-.xonomy .element .children .textnode.empty { min-height: 1em; }
-.xonomy .element .children .textnode.empty .value { cursor: pointer; }
-.xonomy .element .children .textnode.empty .value > .insertionPoint { display: inline; padding: 0px 2px; border-top: 1px solid #dddddd; border-bottom: 1px solid #dddddd; }
-.xonomy .element .children .textnode.empty .value > .insertionPoint > .inside { border-left: 1px solid #dddddd; }
-.xonomy .element .children .textnode.empty:first-child:last-child .value > .dots { display: inline; padding-left: 2em;}
-.xonomy .element .children .textnode.empty .value:hover { background-color: #f2f2f2; }
-.xonomy .element .children .textnode.empty .value:focus { background-color: #f2f2f2; }
+.xonomy.nerd .element .children .textnode.empty { min-height: 1em; }
+.xonomy.nerd .element .children .textnode.empty .value { cursor: pointer; }
+.xonomy.nerd .element .children .textnode.empty .value > .insertionPoint { display: inline; padding: 0px 2px; border-top: 1px solid #dddddd; border-bottom: 1px solid #dddddd; }
+.xonomy.nerd .element .children .textnode.empty .value > .insertionPoint > .inside { border-left: 1px solid #dddddd; }
+.xonomy.nerd .element .children .textnode.empty:first-child:last-child .value > .dots { display: inline; padding-left: 2em;}
+.xonomy.nerd .element .children .textnode.empty .value:hover { background-color: #f2f2f2; }
+.xonomy.nerd .element .children .textnode.empty .value:focus { background-color: #f2f2f2; }
 
 /*Plus-minus collapsor*/
-.xonomy .element > .connector > .plusminus { background-image: url(minus.gif); width: 9px; height: 9px; position: absolute; top: -5px; left: -5px; cursor: pointer; }
-.xonomy .element.hasText .element.oneliner .connector .plusminus { top: 4px; left: 4px; }
-.xonomy.laic .element > .connector > .plusminus { left: 0px; }
+.xonomy.nerd .element > .connector > .plusminus { background-image: url(minus.gif); width: 9px; height: 9px; position: absolute; top: -5px; left: -5px; cursor: pointer; }
+.xonomy.nerd .element.hasText .element.oneliner .connector .plusminus { top: 4px; left: 4px; }
 
 /*Collapsed elements*/
-.xonomy .element.collapsed > .connector > .plusminus { background-image: url(plus.gif); }
-.xonomy .element.collapsed > .children { display: none !important; }
-.xonomy .element.hasText .element.oneliner.collapsed > .tag { display: none; }
-.xonomy.laic .element.hasText .element.oneliner.collapsed > .tag { display: none !important; }
+.xonomy.nerd .element.collapsed > .connector > .plusminus { background-image: url(plus.gif); }
+.xonomy.nerd .element.collapsed > .children { display: none !important; }
+.xonomy.nerd .element.hasText .element.oneliner.collapsed > .tag { display: none; }
 
 /*The "collapsoid" (= rectangle that hides collapsed stuff)*/
-.xonomy .element > .childrenCollapsed { display: none; border: 1px solid #cccccc; color: #999999; border-radius: 2px; margin: 0px 2px; padding: 0px 5px 0px 5px; cursor: pointer; font-size: 1rem; }
-.xonomy .element.collapsed > .childrenCollapsed { display: inline; }
-.xonomy .element > .childrenCollapsed:hover { background-color: #f4f4f4; }
+.xonomy.nerd .element > .childrenCollapsed { display: none; border: 1px solid #cccccc; color: #999999; border-radius: 2px; margin: 0px 2px; padding: 0px 5px 0px 5px; cursor: pointer; font-size: 1rem; }
+.xonomy.nerd .element.collapsed > .childrenCollapsed { display: inline; }
+.xonomy.nerd .element > .childrenCollapsed:hover { background-color: #f4f4f4; }
 
 /*Elements with no children*/
-.xonomy .element.noChildren > .connector > .plusminus { display: none; }
-.xonomy .element.noChildren > .children { display: none; }
-.xonomy .element.noChildren > .tag.closing { display: none; }
-.xonomy .element.noChildren > .tag.opening > .punc.slash { display: inline }
-.xonomy .element.noChildren > .childrenCollapsed { display: none; }
+.xonomy.nerd .element.noChildren > .connector > .plusminus { display: none; }
+.xonomy.nerd .element.noChildren > .children { display: none; }
+.xonomy.nerd .element.noChildren > .tag.closing { display: none; }
+.xonomy.nerd .element.noChildren > .tag.opening > .punc.slash { display: inline }
+.xonomy.nerd .element.noChildren > .childrenCollapsed { display: none; }
 
-.xonomy .element.uncollapsible > .connector > .plusminus { display: none; }
-.xonomy .element.uncollapsible > .childrenCollapsed { display: none; }
-.xonomy .element.hasText .element.uncollapsible .connector { display: none; }
+.xonomy.nerd .element.uncollapsible > .connector > .plusminus { display: none; }
+.xonomy.nerd .element.uncollapsible > .childrenCollapsed { display: none; }
+.xonomy.nerd .element.hasText .element.uncollapsible .connector { display: none; }
 
 /*Drag handle*/
-.xonomy .connector > .draghandle { display: none; width: 9px; height: 13px; background-image: url(draghandle.gif); position: absolute; top: -7px; right: 2px; cursor: move; }
-.xonomy .element.draggable > .connector > .draghandle { display: block; }
-.xonomy .element.readonly .element .draghandle { display: none; }
-.xonomy .element.hasText .element .connector .draghandle { display: none; }
+.xonomy.nerd .connector > .draghandle { display: none; width: 9px; height: 13px; background-image: url(draghandle.gif); position: absolute; top: -7px; right: 2px; cursor: move; }
+.xonomy.nerd .element.draggable > .connector > .draghandle { display: block; }
+.xonomy.nerd .element.readonly .element .draghandle { display: none; }
+.xonomy.nerd .element.hasText .element .connector .draghandle { display: none; }
 
 /*Classes involved in dragging and dropping*/
-.xonomy .dragging { color: #cccccc !important; }
-.xonomy .dragging * { color: #cccccc !important; }
-.xonomy .dragging .draghandle { opacity: 0.5; }
-.xonomy .elementDropper { display: block; margin-top: 0px; margin-bottom: 0px; height: 0px; position: relative; }
-.xonomy .elementDropper > .inside { display: block; height: 9px; width: 9px; border: 1px solid #ffffff; background-color: #dddddd; position: absolute; top: -8px; left: -6px; z-index: 10; }
-.xonomy .elementDropper:first-child > .inside { top: -1px;  }
-.xonomy .elementDropper:only-child > .inside { top: -5px;  }
-.xonomy .activeDropper > .inside { background-color: #888888; }
-
-.xonomy.laic .elementDropper > .inside { top: -5px; left: 16px; }
-.xonomy.laic .elementDropper:first-child > .inside { top: -5px;  }
-.xonomy.laic .elementDropper:only-child > .inside { top: 0px;  }
-
+.xonomy.nerd .dragging { color: #cccccc !important; }
+.xonomy.nerd .dragging * { color: #cccccc !important; }
+.xonomy.nerd .dragging .draghandle { opacity: 0.5; }
+.xonomy.nerd .elementDropper { display: block; margin-top: 0px; margin-bottom: 0px; height: 0px; position: relative; }
+.xonomy.nerd .elementDropper > .inside { display: block; height: 9px; width: 9px; border: 1px solid #ffffff; background-color: #dddddd; position: absolute; top: -8px; left: -6px; z-index: 10; }
+.xonomy.nerd .elementDropper:first-child > .inside { top: -1px;  }
+.xonomy.nerd .elementDropper:only-child > .inside { top: -5px;  }
+.xonomy.nerd .activeDropper > .inside { background-color: #888888; }
 
 /*Chewed selectable text*/
-.xonomy .element > .children > .textnode .char { }
-.xonomy .element > .children > .textnode .word { white-space: nowrap; }
-.xonomy .hasInlineMenu > .children > .textnode .char > .selector { position: absolute; left: 0px; right: 0px; bottom: -2px; height: 1px; background-color: #eeeeee; z-index: 2; }
-.xonomy .hasInlineMenu > .children > .textnode .char > .selector > .inside { position: absolute; left: 0px; right: 0px; bottom: -2px; top: -3px; background-color: transparent; }
-.xonomy .hasInlineMenu > .children > .textnode .char > .selector > .inside:hover { background-color: #cccccc; }
-.xonomy .element > .children > .textnode .char.on { background-color: #ffff99; }
-.xonomy .element > .children > .textnode .char.on > .selector { position: absolute; left: 0px; right: 0px; z-index: 2; background-color: #00cc00; xbackground-color: #669acc; height: 3px; bottom: -3px; }
-.xonomy .element > .children > .textnode .char.on > .selector > .inside { position: absolute; left: 0px; right: 0px; top: -2px; bottom: -1px; background-color: transparent; }
+.xonomy.nerd .element > .children > .textnode .char { }
+.xonomy.nerd .element > .children > .textnode .word { white-space: nowrap; }
+.xonomy.nerd .hasInlineMenu > .children > .textnode .char > .selector { position: absolute; left: 0px; right: 0px; bottom: -2px; height: 1px; background-color: #eeeeee; z-index: 2; }
+.xonomy.nerd .hasInlineMenu > .children > .textnode .char > .selector > .inside { position: absolute; left: 0px; right: 0px; bottom: -2px; top: -3px; background-color: transparent; }
+.xonomy.nerd .hasInlineMenu > .children > .textnode .char > .selector > .inside:hover { background-color: #cccccc; }
+.xonomy.nerd .element > .children > .textnode .char.on { background-color: #ffff99; }
+.xonomy.nerd .element > .children > .textnode .char.on > .selector { position: absolute; left: 0px; right: 0px; z-index: 2; background-color: #00cc00; xbackground-color: #669acc; height: 3px; bottom: -3px; }
+.xonomy.nerd .element > .children > .textnode .char.on > .selector > .inside { position: absolute; left: 0px; right: 0px; top: -2px; bottom: -1px; background-color: transparent; }
+
+/*The exclamation mark that lets you know if there is a warning attached to an element or attribute*/
+.xonomy.nerd .warner { display: none; width: 16px; margin: 0px 1px 0px 1px; }
+.xonomy.nerd .warner .inside { position: absolute; bottom: -4px; left: 0px; background-image: url(exclamation.png); background-position: 0px 0px; width: 16px; height: 16px; cursor: pointer; }
+.xonomy.nerd .element.invalid > .tag > .warner { display: inline-block; }
+.xonomy.nerd .attribute.invalid > .warner { display: inline-block; }
+
+/*Caption beside attribute values and elements*/
+.xonomy.nerd .inlinecaption { font-family: Verdana, sans-serif; font-size: 0.9rem; color: #999999; font-weight: normal; font-style: italic; margin-left: 4px; margin-right: 4px; }
 
 /*Pop-up box*/
 #xonomyBubble { display: none; position: absolute; z-index: 10; min-width: 100px; }
 #xonomyBubble > div.inside { box-shadow: 0px 0px 5px #99cbff; border: 1px solid #333333; background-color: #dddddd; border-radius: 2px; margin-top: 8px; }
 #xonomyBubble > div.inside > #xonomyBubbleContent { font-family: Verdana, sans-serif; font-size: 0.9rem; color: #666666; margin: 5px; padding: 5px; background-color: #ffffff; border-radius: 2px; }
 #xonomyBubble span.punc { color: #669acc; }
-#xonomyBubble.laic > div.inside { box-shadow: 0px 0px 5px #666666; }
-#xonomyBubble.laic span.punc { display: none; }
 
 /*When the pop-up box functions as menu or picker*/
 #xonomyBubbleContent div.menu { margin: -5px; max-height: 250px; overflow-y: auto; white-space: nowrap; }
@@ -194,12 +161,6 @@
 #xonomyBubbleContent div.menuItem.techno span.explainer { font-family: Verdana, sans-serif; font-size: 0.8rem; color: #999999; font-weight: normal; font-style: italic; margin-left: 3px; }
 #xonomyBubbleContent div.menuItem.current { background-color: #ffffdd; }
 #xonomyBubbleContent div.menuItem:hover { background-color: #ffffcc; }
-#xonomyBubble.laic #xonomyBubbleContent div.menu { max-height: 300px; }
-#xonomyBubble.laic #xonomyBubbleContent div.menuItem { padding: 11px 20px 10px 10px; }
-#xonomyBubble.laic #xonomyBubbleContent span.techno { background-color: #f0f0f0; padding: 3px 0px 3px 0px; border-radius: 2px; }
-#xonomyBubble.laic #xonomyBubbleContent span.techno span.elName { padding: 3px 6px; }
-#xonomyBubble.laic #xonomyBubbleContent span.techno span.atName { padding: 3px 6px; }
-#xonomyBubble.laic #xonomyBubbleContent span.techno span.atValue { background-color: #ffffff; padding: 3px 6px; }
 
 /*When the pop-up box takes input from the user*/
 #xonomyBubbleContent form { margin: -5px; padding: 5px; background-color: #eeeeee; }
@@ -212,15 +173,62 @@
 
 /*When the pop-up is a list of warnings*/
 #xonomyBubbleContent .warning { padding: 5px 10px; }
-#xonomyBubble.laic .warning { padding: 10px; }
 
-/*The exclamation mark that lets you know if there is a warning attached to an element or attribute*/
-.xonomy .warner { display: none; width: 16px; margin: 0px 1px 0px 1px; }
-.xonomy .warner .inside { position: absolute; bottom: -4px; left: 0px; background-image: url(exclamation.png); background-position: 0px 0px; width: 16px; height: 16px; cursor: pointer; }
-.xonomy .element.invalid > .tag > .warner { display: inline-block; }
-.xonomy .attribute.invalid > .warner { display: inline-block; }
+/*LAIC MODE*/
+.xonomy.laic { font-family: sans-serif; font-size: 1rem; cursor: default; background-color: #ffffff;
+	-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+	line-height: 1.5em; padding-left: 5px; }
+.xonomy.laic * { position: relative; }
+.xonomy.laic .element .punc { display: none; }
+.xonomy.laic .element { display: block; border-top: 1px solid #cccccc; margin: 10px 0px; padding: 0px 0px 0px 40px; }
+.xonomy.laic .element > .children > .textnode { display: block; margin: 10px 0px; }
+.xonomy.laic .element > .children > .textnode > .value { display: block; font-family: monospace; background-color: #eeeeee; padding: 5px 10px; border: 1px inset #999999; border-radius: 4px; }
+.xonomy.laic .element > .tag.closing { display: none; }
+.xonomy.laic .element > .tag { display: block; margin: 10px 0px; padding: 5px 10px; border-radius: 4px; }
+.xonomy.laic .element > .tag > .name {font-weight: bold; color: #315696; }
+.xonomy.laic .element > .tag.opening > .attributes > .attribute { margin-left: 1em; border-left: 1px solid #cccccc; padding-left: 1em;}
+.xonomy.laic .element > .tag.opening > .attributes > .attribute > .name { font-weight: bold; color: #6385bf; }
+.xonomy.laic .element > .tag.opening > .attributes > .attribute > .valueContainer { display: inline; background-color: #eeeeee; padding: 2px 10px; border: 1px inset #999999; margin-left: 10px; font-family: monospace; font-size: 1rem; border-radius: 2px; color: #883737; }
+.xonomy.laic .element > .children > .textnode > .value > .insertionPoint { display: none; }
+.xonomy.laic .element > .children > .textnode > .value > .dots { display: none; }
 
-.xonomy.laic .warner { margin-left: 10px; margin-right: 0px; }
+/*Plus-minus collapsor*/
+.xonomy.laic .element > .connector > .plusminus { background-image: url(minus.gif); background-position: center center; background-repeat: no-repeat; width: 1rem; height: 1rem; background-color: #dddddd; position: absolute; top: 34px; left: -30px; cursor: pointer; }
 
-.xonomy .inlinecaption { font-family: Verdana, sans-serif; font-size: 0.9rem; color: #999999; font-weight: normal; font-style: italic; margin-left: 4px; margin-right: 4px; }
-.xonomy.laic .inlinecaption {margin-left: 6px; margin-right: 6px;}
+/*Collapsed elements*/
+.xonomy.laic .element.collapsed > .connector > .plusminus { background-image: url(plus.gif); }
+.xonomy.laic .element.collapsed > .children { display: none !important; }
+.xonomy.laic .element.hasText .element.oneliner.collapsed > .tag { display: none; }
+
+/*The "collapsoid" (= rectangle that hides collapsed stuff)*/
+.xonomy.laic .element > .childrenCollapsed { display: none; border: 1px solid #cccccc; color: #999999; border-radius: 4px; padding: 1px 5px; cursor: pointer; font-family: monospace; background-color: #ffffff; font-size: 0.9rem;}
+.xonomy.laic .element.collapsed > .childrenCollapsed { display: block; position: absolute; top: 13px; right: 3px; }
+.xonomy.laic .element.collapsed > .childrenCollapsed:hover { background-color: #f4f4f4; }
+
+/*Caption beside attribute values and elements*/
+.xonomy.laic .inlinecaption { font-family: Verdana, sans-serif; font-size: 0.9rem; color: #999999; font-weight: normal; font-style: italic; margin-left: 10px; margin-right: 4px; }
+.xonomy.laic .element > .inlinecaption {margin: 10px 0px; display: block; padding: 0px 10px;}
+
+/*Elements with no children*/
+.xonomy.laic .element.noChildren > .connector > .plusminus { display: none; }
+.xonomy.laic .element.noChildren > .children { display: none; }
+.xonomy.laic .element.noChildren > .childrenCollapsed { display: none; }
+
+/*Elements that cannot be collapsed*/
+.xonomy.laic .element.uncollapsible {padding-left: 0px; }
+.xonomy.laic .element.uncollapsible > .connector > .plusminus { display: none; }
+.xonomy.laic .element.uncollapsible > .childrenCollapsed { display: none; }
+
+.xonomy.laic .element.hasText .element {border: 0px; }
+.xonomy.laic .element.hasInlineMenu > .children {background-color: #eeeeee; padding: 10px 10px; border: 1px inset #999999; border-radius: 4px; line-height: 2em; }
+.xonomy.laic .element.hasInlineMenu .element {display: inline;}
+.xonomy.laic .element.hasInlineMenu .element > .tag.opening {display: inline; background-color: #ffffff; border-radius: 20px 0px 0px 20px; margin: 0px; }
+.xonomy.laic .element.hasInlineMenu .element > .tag.closing {display: inline; background-color: #ffffff; border-radius: 0px 20px 20px 0px;}
+.xonomy.laic .element.hasInlineMenu .element > .children {display: inline; }
+.xonomy.laic .element.hasInlineMenu .textnode {display: inline; border: 0px; margin: 0px; padding: 0px; }
+.xonomy.laic .element.hasInlineMenu .textnode .value {display: inline; border: 0px; padding: 0px; }
+.xonomy.laic .element.hasInlineMenu .element .children {border: 0px; padding: 0px;}
+.xonomy.laic .element.hasInlineMenu .element .childrenCollapsed { display: none; position: relative; top: auto; right: auto; }
+.xonomy.laic .element.hasInlineMenu .element.collapsed .childrenCollapsed {display: inline;}
+.xonomy.laic .element.hasInlineMenu .element > .connector > .plusminus { top: 3px; }
+.xonomy.laic .element.hasInlineMenu .element .name {padding: 0px 5px; }
