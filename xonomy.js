@@ -127,16 +127,20 @@ Xonomy.enrichElement=function(jsElement) {
 	jsElement.getChildElements=function(name) {
 		var ret=[];
 		for(var i=0; i<this.children.length; i++) {
-			if(this.children[i].name==name) ret.push(this.children[i]);
+			if(this.children[i].type=="element") {
+				if(this.children[i].name==name) ret.push(this.children[i]);
+			}
 		}
 		return ret;
 	};
 	jsElement.getDescendantElements=function(name) {
 		var ret=[];
 		for(var i=0; i<this.children.length; i++) {
-			if(this.children[i].name==name) ret.push(this.children[i]);
-			var temp=this.children[i].getDescendantElements(name);
-			for(var t=0; t<temp.length; t++) ret.push(temp[t]);
+			if(this.children[i].type=="element") {
+				if(this.children[i].name==name) ret.push(this.children[i]);
+				var temp=this.children[i].getDescendantElements(name);
+				for(var t=0; t<temp.length; t++) ret.push(temp[t]);
+			}
 		}
 		return ret;
 	};
@@ -193,6 +197,7 @@ Xonomy.verifyDocSpecElement=function(name) { //make sure the DocSpec object has 
 	spec.isReadOnly=Xonomy.asFunction(spec.isReadOnly, false);
 	spec.isInvisible=Xonomy.asFunction(spec.isInvisible, false);
 	if(spec.displayName) spec.displayName=Xonomy.asFunction(spec.displayName, "");
+	if(spec.title) spec.title=Xonomy.asFunction(spec.title, "");
 	for(var i=0; i<spec.menu.length; i++) Xonomy.verifyDocSpecMenuItem(spec.menu[i]);
 	for(var i=0; i<spec.inlineMenu.length; i++) Xonomy.verifyDocSpecMenuItem(spec.inlineMenu[i]);
 	for(var attributeName in spec.attributes) Xonomy.verifyDocSpecAttribute(name, attributeName);
@@ -210,6 +215,7 @@ Xonomy.verifyDocSpecAttribute=function(elementName, attributeName) { //make sure
 	spec.isInvisible=Xonomy.asFunction(spec.isInvisible, false);
 	spec.shy=Xonomy.asFunction(spec.shy, false);
 	if(spec.displayName) spec.displayName=Xonomy.asFunction(spec.displayName, "");
+	if(spec.title) spec.title=Xonomy.asFunction(spec.title, "");
 	for(var i=0; i<spec.menu.length; i++) Xonomy.verifyDocSpecMenuItem(spec.menu[i]);
 };
 Xonomy.verifyDocSpecMenuItem=function(menuItem) { //make sure the menu item has all it needs
@@ -453,6 +459,8 @@ Xonomy.renderElement=function(element) {
 	if(spec.menu.length>0) classNames+=" hasMenu"; //not always accurate: whether an element has a menu is actually determined at runtime
 	var displayName=element.name;
 	if(spec.displayName) displayName=Xonomy.textByLang(spec.displayName(element));
+	var title="";
+	if(spec.title) title=Xonomy.textByLang(spec.title(element));
 	var html="";
 	html+='<div data-name="'+element.name+'" id="'+htmlID+'" class="'+classNames+'">';
 		html+='<span class="connector">';
@@ -462,7 +470,7 @@ Xonomy.renderElement=function(element) {
 		html+='<span class="tag opening" style="background-color: '+spec.backgroundColour+';">';
 			html+='<span class="punc">&lt;</span>';
 			html+='<span class="warner"><span class="inside" onclick="Xonomy.click(\''+htmlID+'\', \'warner\')"></span></span>';
-			html+='<span class="name" onclick="Xonomy.click(\''+htmlID+'\', \'openingTagName\')">'+displayName+'</span>';
+			html+='<span class="name" title="'+title+'" onclick="Xonomy.click(\''+htmlID+'\', \'openingTagName\')">'+displayName+'</span>';
 			html+='<span class="attributes">';
 				for(var i=0; i<element.attributes.length; i++) {
 					Xonomy.verifyDocSpecAttribute(element.name, element.attributes[i].name);
@@ -515,11 +523,13 @@ Xonomy.renderAttribute=function(attribute, optionalParentName) {
 	var displayName=attribute.name;
 	var displayValue=Xonomy.xmlEscape(attribute.value);
 	var caption="";
+	var title="";
 	if(optionalParentName) {
 		var spec=Xonomy.docSpec.elements[optionalParentName].attributes[attribute.name];
 		if(spec) {
 			if(spec.displayName) displayName=Xonomy.textByLang(spec.displayName(attribute));
 			if(spec.displayValue) displayValue=Xonomy.textByLang(spec.displayValue(attribute));
+			if(spec.title) title=Xonomy.textByLang(spec.title(attribute));
 			if(spec.caption) caption=Xonomy.textByLang(spec.caption(attribute));
 			if(spec.isReadOnly && spec.isReadOnly(attribute)) { readonly=true; classNames+=" readonly"; }
 			if(spec.isInvisible && spec.isInvisible(attribute)) { classNames+=" invisible"; }
@@ -532,7 +542,7 @@ Xonomy.renderAttribute=function(attribute, optionalParentName) {
 		html+='<span class="punc"> </span>';
 		var onclick=''; if(!readonly) onclick=' onclick="Xonomy.click(\''+htmlID+'\', \'attributeName\')"';
 		html+='<span class="warner"><span class="inside" onclick="Xonomy.click(\''+htmlID+'\', \'warner\')"></span></span>';
-		html+='<span class="name"'+onclick+'>'+displayName+'</span>';
+		html+='<span class="name" title="'+title+'"'+onclick+'>'+displayName+'</span>';
 		html+='<span class="punc">=</span>';
 		var onclick=''; if(!readonly) onclick=' onclick="Xonomy.click(\''+htmlID+'\', \'attributeValue\')"';
 		html+='<span class="valueContainer"'+onclick+'>';
@@ -720,6 +730,8 @@ Xonomy.click=function(htmlID, what) {
 				if(what=="openingTagName") Xonomy.showBubble($("#"+htmlID+" > .tag.opening > .name")); //anchor bubble to opening tag
 				if(what=="closingTagName") Xonomy.showBubble($("#"+htmlID+" > .tag.closing > .name")); //anchor bubble to closing tag
 			}
+			var surrogateElem = Xonomy.harvestElement(document.getElementById(htmlID));
+			$("#"+htmlID).trigger("xonomy-click-element", [surrogateElem]);
 		}
 		if(!isReadOnly && what=="attributeName") {
 			$("#"+htmlID).addClass("current"); //make the attribute current
@@ -727,6 +739,8 @@ Xonomy.click=function(htmlID, what) {
 			if(content!="") {
 				document.body.appendChild(Xonomy.makeBubble(content)); //create bubble
 				Xonomy.showBubble($("#"+htmlID+" > .name")); //anchor bubble to attribute name
+				var surrogateAttr = Xonomy.harvestAttribute(document.getElementById(htmlID));
+				$("#"+htmlID).trigger("xonomy-click-attribute", [surrogateAttr]);
 			}
 		}
 		if(!isReadOnly && what=="attributeValue") {
