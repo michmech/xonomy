@@ -967,9 +967,6 @@ Xonomy.wyc=function(url, callback){ //a "when-you-can" function for delayed rend
 	});
 	return "<span class='wyc' id='"+wycID+"'></span>";
 };
-Xonomy.val2item=function(arr, val){ //takes an arr of {value: "", ...} objects and returns the one whose value property is equal to val
-	for(var i=0; i<arr.length; i++) if(arr[i].value && arr[i].value==val) return arr[i];
-}
 
 Xonomy.attributeMenu=function(htmlID) {
 	var name=$("#"+htmlID).attr("data-name"); //obtain attribute's name
