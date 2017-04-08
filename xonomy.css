@@ -359,3 +359,8 @@
 
 /*When the pop-up is a list of warnings*/
 #xonomyBubble.laic #xonomyBubbleContent .warning { padding: 5px 10px; }
+
+#xonomyBubble .wyc { display: inline-block; background-image: url(loader.gif); background-position: center center; background-repeat: no-repeat; width: 100%; height: 30px; margin: 5px 0px 0px 0px; }
+.xonomy .wyc { display: inline-block; background-image: url(loader.gif); background-position: center center; background-repeat: no-repeat; width: 30px; height: 10px; }
+.xonomy .inlinecaption a { color: inherit; text-decoration: none; border-bottom: 1px dotted; padding: 3px 0px;}
+.xonomy .inlinecaption a:hover {color: #2d4ea1}

@@ -926,6 +926,41 @@ Xonomy.askOpenPicklist=function(defaultString, picklist) {
 	html+="</form>";
     return html;
 };
+Xonomy.askRemote=function(defaultString, param, jsMe) {
+	var html=Xonomy.wyc(param.url, function(picklist){
+		var html="";
+		html+="<div class='menu'>";
+		for(var i=0; i<picklist.length; i++) {
+			var item=picklist[i];
+			if(typeof(item)=="string") item={value: item, caption: ""};
+			html+="<div class='menuItem techno"+(item.value==defaultString?" current":"")+"' onclick='Xonomy.answer(\""+Xonomy.xmlEscape(item.value)+"\")'>";
+			html+="<span class='punc'>\"</span>";
+			if(item.displayValue) html+=Xonomy.textByLang(item.displayValue); else html+=Xonomy.xmlEscape(item.value);
+			html+="<span class='punc'>\"</span>";
+			if(item.caption!="") html+=" <span class='explainer'>"+Xonomy.xmlEscape(Xonomy.textByLang(item.caption))+"</span>";
+			html+="</div>";
+		}
+		html+="</div>";
+		return html;
+	});
+	return html;
+};
+
+Xonomy.wycLastID=0;
+Xonomy.wycCache={};
+Xonomy.wyc=function(url, callback){ //a "when-you-can" function for delayed rendering: gets json from url, passes it to callback, and delayed-returns html-as-string from callback
+	Xonomy.wycLastID++;
+	var wycID="xonomy_wyc_"+Xonomy.wycLastID;
+	if(Xonomy.wycCache[url]) return callback(Xonomy.wycCache[url]);
+	$.ajax({url: url, dataType: "json", method: "POST"}).done(function(data){
+			$("#"+wycID).replaceWith(callback(data));
+			Xonomy.wycCache[url]=data;
+	});
+	return "<span class='wyc' id='"+wycID+"'></span>";
+};
+Xonomy.val2item=function(arr, val){ //takes an arr of {value: "", ...} objects and returns the one whose value property is equal to val
+	for(var i=0; i<arr.length; i++) if(arr[i].value && arr[i].value==val) return arr[i];
+}
 
 Xonomy.attributeMenu=function(htmlID) {
 	var name=$("#"+htmlID).attr("data-name"); //obtain attribute's name
