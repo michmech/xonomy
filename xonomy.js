@@ -8,8 +8,14 @@ Xonomy.setMode=function(mode) {
 	if(mode=="laic") $(".xonomy").removeClass("nerd").addClass("laic");
 }
 
-Xonomy.xmlEscape=function(str) {
-    return String(str)
+Xonomy.jsEscape=function(str) {
+  return String(str)
+		.replace(/\"/g, '\\\"')
+		.replace(/\'/g, '\\\'')
+};
+Xonomy.xmlEscape=function(str, jsEscape) {
+	if(jsEscape) str=Xonomy.jsEscape(str);
+  return String(str)
 		.replace(/&/g, '&amp;')
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, '&apos;')
@@ -889,6 +895,51 @@ Xonomy.askLongString=function(defaultString, askerParameter, jsMe) {
 };
 Xonomy.askPicklist=function(defaultString, picklist, jsMe) {
 	var html="";
+	html+=Xonomy.pickerMenu(picklist, defaultString);
+	return html;
+};
+Xonomy.askOpenPicklist=function(defaultString, picklist) {
+	var isInPicklist=false;
+    var html="";
+		html+=Xonomy.pickerMenu(picklist, defaultString);
+		html+="<form class='undermenu' onsubmit='Xonomy.answer(this.val.value); return false'>";
+		html+="<input name='val' class='textbox focusme' value='"+(!isInPicklist ? Xonomy.xmlEscape(defaultString) : "")+"'/>";
+		html+=" <input type='submit' value='OK'>";
+		html+="</form>";
+    return html;
+};
+Xonomy.askRemote=function(defaultString, param, jsMe) {
+	var html="";
+	if(param.searchUrl || param.createUrl) {
+		html+="<form class='overmenu' onsubmit='return Xonomy.remoteSearch(\""+Xonomy.xmlEscape(param.searchUrl, true)+"\", \""+Xonomy.xmlEscape(param.urlPlaceholder, true)+"\", \""+Xonomy.xmlEscape(Xonomy.jsEscape(defaultString))+"\")'>";
+		html+="<input name='val' class='textbox focusme' value=''/>";
+		if(param.searchUrl) html+=" <button class='buttonSearch' onclick='return Xonomy.remoteSearch(\""+Xonomy.xmlEscape(param.searchUrl, true)+"\", \""+Xonomy.xmlEscape(param.urlPlaceholder, true)+"\", \""+Xonomy.xmlEscape(Xonomy.jsEscape(defaultString))+"\")'>&nbsp;</button>";
+		if(param.createUrl) html+=" <button class='buttonCreate' onclick='return Xonomy.remoteCreate(\""+Xonomy.xmlEscape(param.createUrl, true)+"\", \""+Xonomy.xmlEscape( (param.searchUrl?param.searchUrl:param.url) , true)+"\", \""+Xonomy.xmlEscape(param.urlPlaceholder, true)+"\", \""+Xonomy.xmlEscape(Xonomy.jsEscape(defaultString))+"\")'>&nbsp;</button>";
+		html+="</form>";
+	}
+	html+=Xonomy.wyc(param.url, function(picklist){ return Xonomy.pickerMenu(picklist, defaultString); });
+	return html;
+};
+Xonomy.remoteSearch=function(searchUrl, urlPlaceholder, defaultString){
+	var text=$("#xonomyBubble input.textbox").val();
+	searchUrl=searchUrl.replace(urlPlaceholder, encodeURIComponent(text));
+	$("#xonomyBubble .menu").replaceWith( Xonomy.wyc(searchUrl, function(picklist){ return Xonomy.pickerMenu(picklist, defaultString); }) );
+	return false;
+};
+Xonomy.remoteCreate=function(createUrl, searchUrl, urlPlaceholder, defaultString){
+	var text=$.trim($("#xonomyBubble input.textbox").val());
+	if(text!="") {
+		createUrl=createUrl.replace(urlPlaceholder, encodeURIComponent(text));
+		searchUrl=searchUrl.replace(urlPlaceholder, encodeURIComponent(text));
+		$.ajax({url: createUrl, dataType: "text", method: "POST"}).done(function(data){
+			if(Xonomy.wycCache[searchUrl]) delete Xonomy.wycCache[searchUrl];
+			$("#xonomyBubble .menu").replaceWith( Xonomy.wyc(searchUrl, function(picklist){ return Xonomy.pickerMenu(picklist, defaultString); }) );
+		});
+	}
+	return false;
+};
+Xonomy.pickerMenu=function(picklist, defaultString){
+	var html="";
 	html+="<div class='menu'>";
 	for(var i=0; i<picklist.length; i++) {
 		var item=picklist[i];
@@ -901,48 +952,6 @@ Xonomy.askPicklist=function(defaultString, picklist, jsMe) {
 		html+="</div>";
 	}
 	html+="</div>";
-	return html;
-};
-Xonomy.askOpenPicklist=function(defaultString, picklist) {
-	var isInPicklist=false;
-    var html="";
-    html+="<div class='menu'>";
-    for(var i=0; i<picklist.length; i++) {
-		var item=picklist[i];
-		if(typeof(item)=="string") item={value: item, caption: ""};
-		if(item.value==defaultString) isInPicklist=true;
-		html+="<div class='menuItem techno"+(item.value==defaultString?" current":"")+"' onclick='Xonomy.answer(\""+Xonomy.xmlEscape(item.value)+"\")'>";
-		html+="<span class='punc'>\"</span>";
-		html+=Xonomy.xmlEscape(item.value);
-		html+="<span class='punc'>\"</span>";
-		if(item.caption!="") html+=" <span class='explainer'>"+Xonomy.xmlEscape(Xonomy.textByLang(item.caption))+"</span>";
-		html+="</div>";
-    }
-    html+="</div>";
-
-	html+="<form class='undermenu' onsubmit='Xonomy.answer(this.val.value); return false'>";
-	html+="<input name='val' class='textbox focusme' value='"+(!isInPicklist ? Xonomy.xmlEscape(defaultString) : "")+"'/>";
-	html+=" <input type='submit' value='OK'>";
-	html+="</form>";
-    return html;
-};
-Xonomy.askRemote=function(defaultString, param, jsMe) {
-	var html=Xonomy.wyc(param.url, function(picklist){
-		var html="";
-		html+="<div class='menu'>";
-		for(var i=0; i<picklist.length; i++) {
-			var item=picklist[i];
-			if(typeof(item)=="string") item={value: item, caption: ""};
-			html+="<div class='menuItem techno"+(item.value==defaultString?" current":"")+"' onclick='Xonomy.answer(\""+Xonomy.xmlEscape(item.value)+"\")'>";
-			html+="<span class='punc'>\"</span>";
-			if(item.displayValue) html+=Xonomy.textByLang(item.displayValue); else html+=Xonomy.xmlEscape(item.value);
-			html+="<span class='punc'>\"</span>";
-			if(item.caption!="") html+=" <span class='explainer'>"+Xonomy.xmlEscape(Xonomy.textByLang(item.caption))+"</span>";
-			html+="</div>";
-		}
-		html+="</div>";
-		return html;
-	});
 	return html;
 };
 
