@@ -1,7 +1,5 @@
-Xonomy is a web-based, schema-driven XML editor, written entirely in JavaScript and embeddable in any web page. Xonomy emulates the look and feel of a text editor with syntax highlighting, code folding and autocompletion. It is, however, not a text editor: you edit your XML documents by clicking on nodes, selecting options from context menus, selecting attribute values from picklists, dragging and dropping elements around, and so on.
+# Xonomy
 
-You can customize Xonomy by giving it a **document specification**. A document specification is similar to a schema: it determines what actions the user can perform on each element, which attributes or child elements the user can create, where attribute values come from, and so on. This gives you a mechanism for constraining the structure of your XML documents which is roughly equivalent to a Document Type Definition (DTD). You can constrain your document further by attaching your own **validation functions** in JavaScript.
+Xonomy is a web-based, schema-drive XML editor. For demos and documentation see: http://www.lexiconista.com/xonomy/
 
-Xonomy can handle both data-centric XML, which it displays in a tree structure, and document-centric XML, which is displayed as running text with inline XML markup. Xonomy is able to handle **mixed content** (elements which contain a mixture of text and elements) and has features for annotating text with inline XML. Xonomy can work with documents that use **namespaces**.
-
-For documentation see here: http://www.lexiconista.com/xonomy/
+This is Xonomy version 3.3.0, released 9 April 2017.
