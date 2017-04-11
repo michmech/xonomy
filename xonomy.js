@@ -501,7 +501,7 @@ Xonomy.renderElement=function(element) {
 					if(hasText && prevChildType=="element" && child.type=="element") {
 						html+=Xonomy.renderText({type: "text", value: ""}); //if inline layout, insert empty text node between two elements
 					}
-					if(child.type=="text") html+=Xonomy.renderText(child, !(spec.inlineMenu && spec.inlineMenu.length>0)); //text node
+					if(child.type=="text") html+=Xonomy.renderText(child); //text node
 					else if(child.type=="element") html+=Xonomy.renderElement(child); //element node
 					prevChildType=child.type;
 				}
@@ -561,7 +561,7 @@ Xonomy.renderAttribute=function(attribute, optionalParentName) {
 	attribute.htmlID = htmlID;
 	return html;
 };
-Xonomy.renderText=function(text, dontchew) {
+Xonomy.renderText=function(text) {
 	var htmlID=Xonomy.nextID();
 	var classNames="textnode";
 	if($.trim(text.value)=="") classNames+=" whitespace";
@@ -569,11 +569,7 @@ Xonomy.renderText=function(text, dontchew) {
 	var html="";
 	html+='<div id="'+htmlID+'" data-value="'+Xonomy.xmlEscape(text.value)+'" class="'+classNames+'">';
 		html+='<span class="connector"></span>';
-		if(dontchew) {
-			var txt=Xonomy.xmlEscape(text.value);
-		} else {
-			var txt=Xonomy.chewText(text.value);
-		}
+		var txt=Xonomy.chewText(text.value);
 		html+='<span class="value" onclick="Xonomy.click(\''+htmlID+'\', \'text\')"><span class="insertionPoint"><span class="inside"></span></span><span class="dots"></span>'+txt+'</span>';
 	html+='</div>';
 	text.htmlID = htmlID;
@@ -599,8 +595,8 @@ Xonomy.chewText=function(txt) {
 	for(var i=0; i<txt.length; i++) {
 		if(txt[i]==" ") ret+="</span>"; //end word
 		var t=Xonomy.xmlEscape(txt[i])
-		if(i==0 && t==" ") t="&nbsp;"; //leading space
-		if(i==txt.length-1 && t==" ") t="&nbsp;"; //trailing space
+		if(i==0 && t==" ") t="<span class='space'>&middot;</span>"; //leading space
+		if(i==txt.length-1 && t==" ") t="<span class='space'>&middot;</span>"; //trailing space
 		ret+="<span class='char'>"+t+"<span class='selector'><span class='inside' onclick='Xonomy.charClick(this.parentNode.parentNode)'></span></span></span>";
 		if(txt[i]==" ") ret+="<span class='word'>"; //start word
 	}
