@@ -651,6 +651,7 @@ Xonomy.wrap=function(htmlID, param) {
 	Xonomy.clickoff();
 	var xml=param.template;
 	var ph=param.placeholder;
+	var jsElement=Xonomy.harvestElement(document.getElementById(htmlID));
 	if(Xonomy.textFromID==Xonomy.textTillID) { //abc --> a<XYZ>b</XYZ>c
 		var jsOld=Xonomy.harvestText(document.getElementById(Xonomy.textFromID));
 		var txtOpen=jsOld.value.substring(0, Xonomy.textFromIndex);
@@ -659,7 +660,7 @@ Xonomy.wrap=function(htmlID, param) {
 		xml=xml.replace(ph, Xonomy.xmlEscape(txtMiddle));
 		var html="";
 		html+=Xonomy.renderText({type: "text", value: txtOpen});
-		html+=Xonomy.renderElement(Xonomy.xml2js(xml));
+		html+=Xonomy.renderElement(Xonomy.xml2js(xml, jsElement));
 		html+=Xonomy.renderText({type: "text", value: txtClose});
 		$("#"+Xonomy.textFromID).replaceWith(html);
 	} else { //ab<...>cd --> a<XYZ>b<...>c</XYZ>d
@@ -679,7 +680,7 @@ Xonomy.wrap=function(htmlID, param) {
 		$("#"+Xonomy.textTillID).remove();
 		var html="";
 		html+=Xonomy.renderText({type: "text", value: txtOpen});
-		html+=Xonomy.renderElement(Xonomy.xml2js(xml));
+		html+=Xonomy.renderElement(Xonomy.xml2js(xml, jsElement));
 		html+=Xonomy.renderText({type: "text", value: txtClose});
 		$("#"+Xonomy.textFromID).replaceWith(html);
 	}
@@ -1078,7 +1079,8 @@ Xonomy.newAttribute=function(htmlID, parameter) {
 };
 Xonomy.newElementChild=function(htmlID, parameter) {
 	Xonomy.clickoff();
-	var html=Xonomy.renderElement(Xonomy.xml2js(parameter));
+	var jsElement=Xonomy.harvestElement(document.getElementById(htmlID));
+	var html=Xonomy.renderElement(Xonomy.xml2js(parameter, jsElement));
 	var $html=$(html).hide();
 	$("#"+htmlID+" > .children").append($html);
 	Xonomy.plusminus(htmlID, true);
@@ -1120,7 +1122,8 @@ Xonomy.elementReorder=function(htmlID){
 };
 Xonomy.newElementBefore=function(htmlID, parameter) {
 	Xonomy.clickoff();
-	var html=Xonomy.renderElement(Xonomy.xml2js(parameter));
+	var jsElement=Xonomy.harvestElement(document.getElementById(htmlID));
+	var html=Xonomy.renderElement(Xonomy.xml2js(parameter, jsElement.parent()));
 	var $html=$(html).hide();
 	$("#"+htmlID).before($html);
 	Xonomy.changed();
@@ -1128,7 +1131,8 @@ Xonomy.newElementBefore=function(htmlID, parameter) {
 };
 Xonomy.newElementAfter=function(htmlID, parameter) {
 	Xonomy.clickoff();
-	var html=Xonomy.renderElement(Xonomy.xml2js(parameter));
+	var jsElement=Xonomy.harvestElement(document.getElementById(htmlID));
+	var html=Xonomy.renderElement(Xonomy.xml2js(parameter, jsElement.parent()));
 	var $html=$(html).hide();
 	$("#"+htmlID).after($html);
 	Xonomy.changed();
@@ -1154,8 +1158,8 @@ Xonomy.editRaw=function(htmlID, parameter) {
 	Xonomy.answer=function(val) {
 		var jsNewElement;
 		if(parameter.toJs) jsNewElement=parameter.toJs(val, jsElement);
-		else if(parameter.toXml) jsNewElement=Xonomy.xml2js(parameter.toXml(val, jsElement));
-		else jsNewElement=Xonomy.xml2js(val);
+		else if(parameter.toXml) jsNewElement=Xonomy.xml2js(parameter.toXml(val, jsElement), jsElement.parent());
+		else jsNewElement=Xonomy.xml2js(val, jsElement.parent());
 
 		var obj=document.getElementById(htmlID);
 		var html=Xonomy.renderElement(jsNewElement);
