@@ -183,7 +183,11 @@ Xonomy.asFunction=function(specProperty, defaultValue){
 }
 Xonomy.verifyDocSpecElement=function(name) { //make sure the DocSpec object has such an element, that the element has everything it needs
 	if(!Xonomy.docSpec.elements[name] || typeof(Xonomy.docSpec.elements[name])!="object") {
-		if(Xonomy.docSpec.unknownElement) Xonomy.docSpec.elements[name]=Xonomy.docSpec.unknownElement;
+		if(Xonomy.docSpec.unknownElement) {
+			Xonomy.docSpec.elements[name]=(typeof(Xonomy.docSpec.unknownElement)==="function") 
+				? Xonomy.docSpec.unknownElement(name) 
+				: Xonomy.docSpec.unknownElement;
+		}
 		else Xonomy.docSpec.elements[name]={};
 	}
 	var spec=Xonomy.docSpec.elements[name];
@@ -211,7 +215,11 @@ Xonomy.verifyDocSpecElement=function(name) { //make sure the DocSpec object has 
 Xonomy.verifyDocSpecAttribute=function(elementName, attributeName) { //make sure the DocSpec object has such an attribute, that the attribute has everything it needs
 	var elSpec=Xonomy.docSpec.elements[elementName];
 	if(!elSpec.attributes[attributeName] || typeof(elSpec.attributes[attributeName])!="object") {
-		if(Xonomy.docSpec.unknownAttribute) elSpec.attributes[attributeName]=Xonomy.docSpec.unknownAttribute;
+		if(Xonomy.docSpec.unknownAttribute) {
+			elSpec.attributes[attributeName]=(typeof(Xonomy.docSpec.unknownAttribute)==="function")
+				? Xonomy.docSpec.unknownAttribute(elementName, attributeName)
+				: Xonomy.docSpec.unknownAttribute;
+		}
 		else elSpec.attributes[attributeName]={};
 	}
 	var spec=elSpec.attributes[attributeName];
