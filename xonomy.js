@@ -964,21 +964,32 @@ Xonomy.wyc=function(url, callback){ //a "when-you-can" function for delayed rend
 	return "<span class='wyc' id='"+wycID+"'></span>";
 };
 
-Xonomy.internalMenu=function(htmlID, items, harvest, getter) {
+Xonomy.internalMenu=function(htmlID, items, harvest, getter, indices) {
+	indices = indices || [];
 	var fragments = items.map(function (item, i) {
 		Xonomy.verifyDocSpecMenuItem(item);
 		var jsMe=harvest(document.getElementById(htmlID));
 		var includeIt=!item.hideIf(jsMe);
 		var html="";
 		if(includeIt) {
-			html+="<div class='menuItem' onclick='Xonomy.callMenuFunction("+getter(i)+", \""+htmlID+"\")'>";
-			html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
-			html+="</div>";
+			indices.push(i);
+			if (item.menu) {
+				html+="<div class='menuItem'>";
+				html+="<div class='menuLabel'>"+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)))+"</div>";
+				html+=Xonomy.internalMenu(htmlID, item.menu, harvest, getter, indices);
+				html+="</div>";
+			} else {
+				html+="<div class='menuItem' onclick='Xonomy.callMenuFunction("+getter(indices)+", \""+htmlID+"\")'>";
+				html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
+				html+="</div>";
 			}
+			indices.pop();
+		}
 		return html;
-		});
+	});
+	var cls = !indices.length ? 'menu' : 'submenu';
 	return fragments.length
-		? "<div class='menu'>"+fragments.join("")+"</div>"
+		? "<div class='"+cls+"'>"+fragments.join("")+"</div>"
 		: "";
 };
 Xonomy.attributeMenu=function(htmlID) {
@@ -986,24 +997,24 @@ Xonomy.attributeMenu=function(htmlID) {
 	var elName=$("#"+htmlID).closest(".element").attr("data-name"); //obtain element's name
 	Xonomy.verifyDocSpecAttribute(elName, name);
 	var spec=Xonomy.docSpec.elements[elName].attributes[name];
-	function getter(i) {
-		return 'Xonomy.docSpec.elements["'+elName+'"].attributes["'+name+'"].menu['+i+']';
+	function getter(indices) {
+		return 'Xonomy.docSpec.elements["'+elName+'"].attributes["'+name+'"].menu['+indices.join('].menu[')+']';
 	}
 	return Xonomy.internalMenu(htmlID, spec.menu, Xonomy.harvestAttribute, getter);
 };
 Xonomy.elementMenu=function(htmlID) {
 	var elName=$("#"+htmlID).attr("data-name"); //obtain element's name
 	var spec=Xonomy.docSpec.elements[elName];
-	function getter(i) {
-		return 'Xonomy.docSpec.elements["'+elName+'"].menu['+i+']';
+	function getter(indices) {
+		return 'Xonomy.docSpec.elements["'+elName+'"].menu['+indices.join('].menu[')+']';
 	}
 	return Xonomy.internalMenu(htmlID, spec.menu, Xonomy.harvestElement, getter);
 };
 Xonomy.inlineMenu=function(htmlID) {
 	var elName=$("#"+htmlID).attr("data-name"); //obtain element's name
 	var spec=Xonomy.docSpec.elements[elName];
-	function getter(i) {
-		return 'Xonomy.docSpec.elements["'+elName+'"].inlineMenu['+i+']';
+	function getter(indices) {
+		return 'Xonomy.docSpec.elements["'+elName+'"].inlineMenu['+indices.join('].menu[')+']';
 	}
 	return Xonomy.internalMenu(htmlID, spec.inlineMenu, Xonomy.harvestElement, getter);
 };
