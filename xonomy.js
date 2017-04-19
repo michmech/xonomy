@@ -848,13 +848,13 @@ Xonomy.showBubble=function($anchor) {
 	var $bubble=$("#xonomyBubble");
 	var offset=$anchor.offset(); var left=offset.left; var top=offset.top;
 	var screenWidth = $("body").width();
-	var screenHeight = $(window).height();
+	var screenHeight = $(document).height();
 	var bubbleHeight = $bubble.outerHeight();
 	var width = $anchor.width(); if (width > 40) width = 40;
 	var height = $anchor.height(); if (height > 25) height = 25;
 	if(left<screenWidth/2) {
 		if (Xonomy.mode == "laic") { width = width - 25; height = height + 10; }
-		if (top + height + bubbleHeight > screenHeight) { // not enough room, open up
+		if (screenHeight>0 && top + height + bubbleHeight > screenHeight) { // not enough room, open up
 			$bubble.css({ top: "", bottom: (screenHeight - top + 5) + "px", left: (left + width - 15) + "px" }); // 5px above for some padding. Anchor using bottom so animation opens upwards.
 		} else {
 			$bubble.css({ top: (top + height) + "px", bottom: "", left: (left + width - 15) + "px" });
