@@ -1065,9 +1065,9 @@ Xonomy.newElementChild=function(htmlID, parameter) {
 	var $html=$(html).hide();
 	$("#"+htmlID+" > .children").append($html);
 	Xonomy.plusminus(htmlID, true);
+	Xonomy.elementReorder($html.attr("id"));
 	Xonomy.changed();
 	$html.fadeIn();
-	Xonomy.elementReorder($html.attr("id"));
 };
 Xonomy.elementReorder=function(htmlID){
 	var that=document.getElementById(htmlID);
