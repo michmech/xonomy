@@ -852,30 +852,30 @@ Xonomy.showBubble=function($anchor) {
 	var bubbleHeight = $bubble.outerHeight();
 	var width = $anchor.width(); if (width > 40) width = 40;
 	var height = $anchor.height(); if (height > 25) height = 25;
-    var placement;
+	if (Xonomy.mode == "laic") { width = width - 25; height = height + 10; }
 
-    function verticalPlacement() {
-        var top = "";
-        var bottom = ""; 
-		if (screenHeight>0 && offset.top + height + bubbleHeight > screenHeight) { // not enough room, open up
-            // 5px above for some padding. Anchor using bottom so animation opens upwards.
-			bottom = (screenHeight - offset.top + 5) + "px"; 
-		} else {
+	function verticalPlacement() {
+		var top = "";
+		var bottom = "";
+		if (offset.top + height + bubbleHeight <= screenHeight) {
+			// enough space - open down
 			top = (offset.top + height) + "px";
+		} else if (screenHeight - offset.top + 5 - bubbleHeight > 0) {
+			// 5px above for some padding. Anchor using bottom so animation opens upwards.
+			bottom = (screenHeight - offset.top + 5) + "px";
+		} else {
+			// neither downwards nor upwards is enough space => center the bubble
+			top = (screenHeight - bubbleHeight)/2 + "px";
 		}
-        return { top: top, bottom: bottom };
-    }
+		return { top: top, bottom: bottom };
+	}
 
-
+	var placement = verticalPlacement();
 	if(offset.left<screenWidth/2) {
-		if (Xonomy.mode == "laic") { width = width - 25; height = height + 10; }
-        placement = verticalPlacement();
-        placement.left = (offset.left + width - 15) + "px";
+		placement.left = (offset.left + width - 15) + "px";
 	} else {
-		if(Xonomy.mode=="laic") { height=height+10; }
 		$bubble.addClass("rightAnchored");
-        placement = verticalPlacement();
-        placement.right = (screenWidth - offset.left) + "px";
+		placement.right = (screenWidth - offset.left) + "px";
 	}
 	$bubble.css(placement);
 	$bubble.slideDown("fast", function() {
