@@ -1150,71 +1150,78 @@ Xonomy.editRaw=function(htmlID, parameter) {
 
 Xonomy.draggingID=null; //what are we dragging?
 Xonomy.drag=function(ev) { //called when dragging starts
-	Xonomy.clickoff();
+	// Wrapping all the code into a timeout handler is a workaround for a Chrome browser bug 
+	// (if the DOM is manipulated in the 'dragStart' event then 'dragEnd' event is sometimes fired immediately)
+	//
+	// for more details @see: 
+	//   http://stackoverflow.com/questions/19639969/html5-dragend-event-firing-immediately
 	var htmlID=ev.target.parentNode.parentNode.id;
-	var $element=$("#"+htmlID);
-	var elementName=$element.attr("data-name");
-	var elSpec=Xonomy.docSpec.elements[elementName];
-	$element.addClass("dragging");
-	$(".xonomy .children").append("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
-	$(".xonomy .children .element").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
-	$(".xonomy .children .text").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
-	$(".xonomy .dragging .elementDropper").remove(); //remove drop targets fom inside the element being dragged
-	$(".xonomy .dragging").prev(".elementDropper").remove(); //remove drop targets from immediately before the element being dragged
-	$(".xonomy .dragging").next(".elementDropper").remove(); //remove drop targets from immediately after the element being dragged
-	$(".xonomy .element.readonly .elementDropper").remove(); //remove drop targets from inside read-only elements
-	if(elSpec.localDropOnly(Xonomy.harvest(htmlID))) {
-		if(elSpec.canDropTo) { //remove the drop target from elements that are not the dragged element's parent
+	ev.dataTransfer.setData("text", htmlID);
+	setTimeout(function() {
+		Xonomy.clickoff();
+		var $element=$("#"+htmlID);
+		var elementName=$element.attr("data-name");
+		var elSpec=Xonomy.docSpec.elements[elementName];
+		$element.addClass("dragging");
+		$(".xonomy .children").append("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
+		$(".xonomy .children .element").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
+		$(".xonomy .children .text").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
+		$(".xonomy .dragging .elementDropper").remove(); //remove drop targets fom inside the element being dragged
+		$(".xonomy .dragging").prev(".elementDropper").remove(); //remove drop targets from immediately before the element being dragged
+		$(".xonomy .dragging").next(".elementDropper").remove(); //remove drop targets from immediately after the element being dragged
+		$(".xonomy .element.readonly .elementDropper").remove(); //remove drop targets from inside read-only elements
+		if(elSpec.localDropOnly(Xonomy.harvest(htmlID))) {
+			if(elSpec.canDropTo) { //remove the drop target from elements that are not the dragged element's parent
+				var droppers=$(".xonomy .elementDropper").toArray();
+				for(var i=0; i<droppers.length; i++) {
+					var dropper=droppers[i];
+					if(dropper.parentNode!=ev.target.parentNode.parentNode.parentNode) {
+						dropper.parentNode.removeChild(dropper);
+					}
+				}
+			}
+		}
+		if(elSpec.canDropTo) { //remove the drop target from elements it cannot be dropped into
 			var droppers=$(".xonomy .elementDropper").toArray();
 			for(var i=0; i<droppers.length; i++) {
 				var dropper=droppers[i];
-				if(dropper.parentNode!=ev.target.parentNode.parentNode.parentNode) {
+				var parentElementName=$(dropper.parentNode.parentNode).toArray()[0].getAttribute("data-name");
+				if($.inArray(parentElementName, elSpec.canDropTo)<0) {
 					dropper.parentNode.removeChild(dropper);
 				}
 			}
 		}
-	}
-	if(elSpec.canDropTo) { //remove the drop target from elements it cannot be dropped into
-		var droppers=$(".xonomy .elementDropper").toArray();
-		for(var i=0; i<droppers.length; i++) {
-			var dropper=droppers[i];
-			var parentElementName=$(dropper.parentNode.parentNode).toArray()[0].getAttribute("data-name");
-			if($.inArray(parentElementName, elSpec.canDropTo)<0) {
-				dropper.parentNode.removeChild(dropper);
-			}
-		}
-	}
-	if(elSpec.mustBeBefore) { //remove the drop target from after elements it cannot be after
-		var jsElement=Xonomy.harvestElement($element.toArray()[0]);
-		var droppers=$(".xonomy .elementDropper").toArray();
-		for(var i=0; i<droppers.length; i++) {
-			var dropper=droppers[i];
-			jsElement.internalParent=Xonomy.harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
-			var mustBeBefore=elSpec.mustBeBefore(jsElement);
-			for(var ii=0; ii<mustBeBefore.length; ii++) {
-				if( $(dropper).prevAll("*[data-name='"+mustBeBefore[ii]+"']").toArray().length>0 ) {
-					dropper.parentNode.removeChild(dropper);
+		if(elSpec.mustBeBefore) { //remove the drop target from after elements it cannot be after
+			var jsElement=Xonomy.harvestElement($element.toArray()[0]);
+			var droppers=$(".xonomy .elementDropper").toArray();
+			for(var i=0; i<droppers.length; i++) {
+				var dropper=droppers[i];
+				jsElement.internalParent=Xonomy.harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
+				var mustBeBefore=elSpec.mustBeBefore(jsElement);
+				for(var ii=0; ii<mustBeBefore.length; ii++) {
+					if( $(dropper).prevAll("*[data-name='"+mustBeBefore[ii]+"']").toArray().length>0 ) {
+						dropper.parentNode.removeChild(dropper);
+					}
 				}
 			}
 		}
-	}
-	if(elSpec.mustBeAfter) { //remove the drop target from before elements it cannot be before
-		var jsElement=Xonomy.harvestElement($element.toArray()[0]);
-		var droppers=$(".xonomy .elementDropper").toArray();
-		for(var i=0; i<droppers.length; i++) {
-			var dropper=droppers[i];
-			jsElement.internalParent=Xonomy.harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
-			var mustBeAfter=elSpec.mustBeAfter(jsElement);
-			for(var ii=0; ii<mustBeAfter.length; ii++) {
-				if( $(dropper).nextAll("*[data-name='"+mustBeAfter[ii]+"']").toArray().length>0 ) {
-					dropper.parentNode.removeChild(dropper);
+		if(elSpec.mustBeAfter) { //remove the drop target from before elements it cannot be before
+			var jsElement=Xonomy.harvestElement($element.toArray()[0]);
+			var droppers=$(".xonomy .elementDropper").toArray();
+			for(var i=0; i<droppers.length; i++) {
+				var dropper=droppers[i];
+				jsElement.internalParent=Xonomy.harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
+				var mustBeAfter=elSpec.mustBeAfter(jsElement);
+				for(var ii=0; ii<mustBeAfter.length; ii++) {
+					if( $(dropper).nextAll("*[data-name='"+mustBeAfter[ii]+"']").toArray().length>0 ) {
+						dropper.parentNode.removeChild(dropper);
+					}
 				}
 			}
 		}
-	}
-	Xonomy.draggingID=htmlID;
-	ev.dataTransfer.setData("text", htmlID);
-	Xonomy.refresh();
+		Xonomy.draggingID=htmlID;
+		Xonomy.refresh();
+	}, 10);
 };
 Xonomy.dragOver=function(ev) {
 	ev.preventDefault();
