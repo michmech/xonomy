@@ -972,60 +972,59 @@ Xonomy.wyc=function(url, callback){ //a "when-you-can" function for delayed rend
 	return "<span class='wyc' id='"+wycID+"'></span>";
 };
 
+Xonomy.internalMenu=function(htmlID, items, harvest, getter, indices) {
+	indices = indices || [];
+	var fragments = items.map(function (item, i) {
+		Xonomy.verifyDocSpecMenuItem(item);
+		var jsMe=harvest(document.getElementById(htmlID));
+		var includeIt=!item.hideIf(jsMe);
+		var html="";
+		if(includeIt) {
+			indices.push(i);
+			if (item.menu) {
+				html+="<div class='menuItem'>";
+				html+="<div class='menuLabel'>"+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)))+"</div>";
+				html+=Xonomy.internalMenu(htmlID, item.menu, harvest, getter, indices);
+				html+="</div>";
+			} else {
+				html+="<div class='menuItem' onclick='Xonomy.callMenuFunction("+getter(indices)+", \""+htmlID+"\")'>";
+				html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
+				html+="</div>";
+			}
+			indices.pop();
+		}
+		return html;
+	});
+	var cls = !indices.length ? 'menu' : 'submenu';
+	return fragments.length
+		? "<div class='"+cls+"'>"+fragments.join("")+"</div>"
+		: "";
+};
 Xonomy.attributeMenu=function(htmlID) {
 	var name=$("#"+htmlID).attr("data-name"); //obtain attribute's name
 	var elName=$("#"+htmlID).closest(".element").attr("data-name"); //obtain element's name
 	Xonomy.verifyDocSpecAttribute(elName, name);
 	var spec=Xonomy.docSpec.elements[elName].attributes[name];
-	var html="";
-	for(var i=0; i<spec.menu.length; i++) {
-		var item=spec.menu[i];
-		Xonomy.verifyDocSpecMenuItem(item);
-		var jsMe=Xonomy.harvestAttribute(document.getElementById(htmlID));
-		var includeIt=!item.hideIf(jsMe);
-		if(includeIt) {
-			html+="<div class='menuItem' onclick='Xonomy.callMenuFunction(Xonomy.docSpec.elements[\""+elName+"\"].attributes[\""+name+"\"].menu["+i+"], \""+htmlID+"\")'>";
-			html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
-			html+="</div>";
-		}
+	function getter(indices) {
+		return 'Xonomy.docSpec.elements["'+elName+'"].attributes["'+name+'"].menu['+indices.join('].menu[')+']';
 	}
-	if(html!="") html="<div class='menu'>"+html+"</div>";
-	return html;
+	return Xonomy.internalMenu(htmlID, spec.menu, Xonomy.harvestAttribute, getter);
 };
 Xonomy.elementMenu=function(htmlID) {
 	var elName=$("#"+htmlID).attr("data-name"); //obtain element's name
 	var spec=Xonomy.docSpec.elements[elName];
-	var html="";
-	for(var i=0; i<spec.menu.length; i++) {
-		var item=spec.menu[i];
-		Xonomy.verifyDocSpecMenuItem(item);
-		var jsMe=Xonomy.harvestElement(document.getElementById(htmlID));
-		var includeIt=!item.hideIf(jsMe);
-		if(includeIt) {
-			html+="<div class='menuItem' onclick='Xonomy.callMenuFunction(Xonomy.docSpec.elements[\""+elName+"\"].menu["+i+"], \""+htmlID+"\")'>";
-			html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
-			html+="</div>";
-		}
+	function getter(indices) {
+		return 'Xonomy.docSpec.elements["'+elName+'"].menu['+indices.join('].menu[')+']';
 	}
-	if(html!="") html="<div class='menu'>"+html+"</div>";
-	return html;
+	return Xonomy.internalMenu(htmlID, spec.menu, Xonomy.harvestElement, getter);
 };
 Xonomy.inlineMenu=function(htmlID) {
 	var elName=$("#"+htmlID).attr("data-name"); //obtain element's name
 	var spec=Xonomy.docSpec.elements[elName];
-	var html="";
-	for(var i=0; i<spec.inlineMenu.length; i++) {
-		var item=spec.inlineMenu[i];
-		var jsMe=Xonomy.harvestElement(document.getElementById(htmlID));
-		var includeIt=!item.hideIf(Xonomy.harvestElement(document.getElementById(htmlID)));
-		if(includeIt) {
-			html+="<div class='menuItem' onclick='Xonomy.callMenuFunction(Xonomy.docSpec.elements[\""+elName+"\"].inlineMenu["+i+"], \""+htmlID+"\")'>";
-			html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
-			html+="</div>";
-		}
+	function getter(indices) {
+		return 'Xonomy.docSpec.elements["'+elName+'"].inlineMenu['+indices.join('].menu[')+']';
 	}
-	if(html!="") html="<div class='menu'>"+html+"</div>";
-	return html;
+	return Xonomy.internalMenu(htmlID, spec.inlineMenu, Xonomy.harvestElement, getter);
 };
 Xonomy.callMenuFunction=function(menuItem, htmlID) {
 	menuItem.action(htmlID, menuItem.actionParameter);
