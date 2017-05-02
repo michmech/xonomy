@@ -1135,12 +1135,13 @@ Xonomy.editRaw=function(htmlID, parameter) {
 	document.body.appendChild(Xonomy.makeBubble(Xonomy.askLongString(txt))); //create bubble
 	Xonomy.showBubble($(div)); //anchor bubble to element
 	Xonomy.answer=function(val) {
-		if(parameter.toJs) var jsElement=parameter.toJs(val, jsElement);
-		else if(parameter.toXml) var jsElement=Xonomy.xml2js(parameter.toXml(val, jsElement));
-		else jsElement=Xonomy.xml2js(val);
+		var jsNewElement;
+		if(parameter.toJs) jsNewElement=parameter.toJs(val, jsElement);
+		else if(parameter.toXml) jsNewElement=Xonomy.xml2js(parameter.toXml(val, jsElement));
+		else jsNewElement=Xonomy.xml2js(val);
 
 		var obj=document.getElementById(htmlID);
-		var html=Xonomy.renderElement(jsElement);
+		var html=Xonomy.renderElement(jsNewElement);
 		$(obj).replaceWith(html);
 		Xonomy.clickoff();
 		Xonomy.changed();
