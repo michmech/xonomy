@@ -184,8 +184,8 @@ Xonomy.asFunction=function(specProperty, defaultValue){
 Xonomy.verifyDocSpecElement=function(name) { //make sure the DocSpec object has such an element, that the element has everything it needs
 	if(!Xonomy.docSpec.elements[name] || typeof(Xonomy.docSpec.elements[name])!="object") {
 		if(Xonomy.docSpec.unknownElement) {
-			Xonomy.docSpec.elements[name]=(typeof(Xonomy.docSpec.unknownElement)==="function") 
-				? Xonomy.docSpec.unknownElement(name) 
+			Xonomy.docSpec.elements[name]=(typeof(Xonomy.docSpec.unknownElement)==="function")
+				? Xonomy.docSpec.unknownElement(name)
 				: Xonomy.docSpec.unknownElement;
 		}
 		else Xonomy.docSpec.elements[name]={};
@@ -749,9 +749,9 @@ Xonomy.click=function(htmlID, what) {
 			if(content!="") {
 				document.body.appendChild(Xonomy.makeBubble(content)); //create bubble
 				Xonomy.showBubble($("#"+htmlID+" > .name")); //anchor bubble to attribute name
-				var surrogateAttr = Xonomy.harvestAttribute(document.getElementById(htmlID));
-				$("#"+htmlID).trigger("xonomy-click-attribute", [surrogateAttr]);
 			}
+			var surrogateAttr = Xonomy.harvestAttribute(document.getElementById(htmlID));
+			$("#"+htmlID).trigger("xonomy-click-attribute", [surrogateAttr]);
 		}
 		if(!isReadOnly && what=="attributeValue") {
 			$("#"+htmlID+" > .valueContainer").addClass("current"); //make attribute value current
@@ -868,7 +868,7 @@ Xonomy.showBubble=function($anchor) {
 		if (offset.top + height + bubbleHeight <= screenHeight) {
 			// enough space - open down
 			top = (offset.top + height) + "px";
-		} else if (screenHeight - offset.top + 5 - bubbleHeight > 0) {
+		} else if (screenHeight - offset.top + 5 + bubbleHeight > 0) {
 			// 5px above for some padding. Anchor using bottom so animation opens upwards.
 			bottom = (screenHeight - offset.top + 5) + "px";
 		} else {
@@ -1167,10 +1167,10 @@ Xonomy.editRaw=function(htmlID, parameter) {
 
 Xonomy.draggingID=null; //what are we dragging?
 Xonomy.drag=function(ev) { //called when dragging starts
-	// Wrapping all the code into a timeout handler is a workaround for a Chrome browser bug 
+	// Wrapping all the code into a timeout handler is a workaround for a Chrome browser bug
 	// (if the DOM is manipulated in the 'dragStart' event then 'dragEnd' event is sometimes fired immediately)
 	//
-	// for more details @see: 
+	// for more details @see:
 	//   http://stackoverflow.com/questions/19639969/html5-dragend-event-firing-immediately
 	var htmlID=ev.target.parentNode.parentNode.id;
 	ev.dataTransfer.setData("text", htmlID);
