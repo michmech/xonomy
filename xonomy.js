@@ -854,28 +854,38 @@ Xonomy.makeBubble=function(content) {
 };
 Xonomy.showBubble=function($anchor) {
 	var $bubble=$("#xonomyBubble");
-	var offset=$anchor.offset(); var left=offset.left; var top=offset.top;
+	var offset=$anchor.offset();
 	var screenWidth = $("body").width();
 	var screenHeight = $(document).height();
 	var bubbleHeight = $bubble.outerHeight();
 	var width = $anchor.width(); if (width > 40) width = 40;
 	var height = $anchor.height(); if (height > 25) height = 25;
-	if(left<screenWidth/2) {
-		if (Xonomy.mode == "laic") { width = width - 25; height = height + 10; }
-		if (screenHeight>0 && top + height + bubbleHeight > screenHeight) { // not enough room, open up
-			$bubble.css({ top: "", bottom: (screenHeight - top + 5) + "px", left: (left + width - 15) + "px" }); // 5px above for some padding. Anchor using bottom so animation opens upwards.
+	if (Xonomy.mode == "laic") { width = width - 25; height = height + 10; }
+
+	function verticalPlacement() {
+		var top = "";
+		var bottom = "";
+		if (offset.top + height + bubbleHeight <= screenHeight) {
+			// enough space - open down
+			top = (offset.top + height) + "px";
+		} else if (screenHeight - offset.top + 5 - bubbleHeight > 0) {
+			// 5px above for some padding. Anchor using bottom so animation opens upwards.
+			bottom = (screenHeight - offset.top + 5) + "px";
 		} else {
-			$bubble.css({ top: (top + height) + "px", bottom: "", left: (left + width - 15) + "px" });
+			// neither downwards nor upwards is enough space => center the bubble
+			top = (screenHeight - bubbleHeight)/2 + "px";
 		}
-	} else {
-		if(Xonomy.mode=="laic") { height=height+10; }
-		$bubble.addClass("rightAnchored");
-		if (top + height + bubbleHeight > screenHeight) { // not enough room, open up
-			$bubble.css({ top: "", bottom: (screenHeight - top + 5) + "px", right: (screenWidth - left) + "px" }); // 5px above for some padding. Anchor using bottom so animation opens upwards.
-		} else {
-			$bubble.css({ top: (top + height) + "px", bottom: "", right: (screenWidth - left) + "px" });
-		}
+		return { top: top, bottom: bottom };
 	}
+
+	var placement = verticalPlacement();
+	if(offset.left<screenWidth/2) {
+		placement.left = (offset.left + width - 15) + "px";
+	} else {
+		$bubble.addClass("rightAnchored");
+		placement.right = (screenWidth - offset.left) + "px";
+	}
+	$bubble.css(placement);
 	$bubble.slideDown("fast", function() {
 		$bubble.find(".focusme").first().focus(); //if the context menu contains anything with the class name 'focusme', focus it.
 	});
