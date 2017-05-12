@@ -983,6 +983,11 @@ Xonomy.wyc=function(url, callback){ //a "when-you-can" function for delayed rend
 	return "<span class='wyc' id='"+wycID+"'></span>";
 };
 
+Xonomy.toggleSubmenu=function(menuItem){
+	var $menuItem=$(menuItem);
+	if($menuItem.hasClass("expanded")){ $menuItem.removeClass("expanded"); $menuItem.find(".submenu").first().slideUp("fast"); }
+	else { $menuItem.addClass("expanded"); $menuItem.find(".submenu").first().slideDown("fast"); };
+}
 Xonomy.internalMenu=function(htmlID, items, harvest, getter, indices) {
 	indices = indices || [];
 	var fragments = items.map(function (item, i) {
@@ -994,7 +999,7 @@ Xonomy.internalMenu=function(htmlID, items, harvest, getter, indices) {
 			indices.push(i);
 			if (item.menu) {
 				html+="<div class='menuItem'>";
-				html+="<div class='menuLabel'>"+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)))+"</div>";
+				html+="<div class='menuLabel' onclick='Xonomy.toggleSubmenu(this.parentNode)'>"+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)))+"</div>";
 				html+=Xonomy.internalMenu(htmlID, item.menu, harvest, getter, indices);
 				html+="</div>";
 			} else {
