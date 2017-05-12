@@ -183,7 +183,11 @@ Xonomy.asFunction=function(specProperty, defaultValue){
 }
 Xonomy.verifyDocSpecElement=function(name) { //make sure the DocSpec object has such an element, that the element has everything it needs
 	if(!Xonomy.docSpec.elements[name] || typeof(Xonomy.docSpec.elements[name])!="object") {
-		if(Xonomy.docSpec.unknownElement) Xonomy.docSpec.elements[name]=Xonomy.docSpec.unknownElement;
+		if(Xonomy.docSpec.unknownElement) {
+			Xonomy.docSpec.elements[name]=(typeof(Xonomy.docSpec.unknownElement)==="function")
+				? Xonomy.docSpec.unknownElement(name)
+				: Xonomy.docSpec.unknownElement;
+		}
 		else Xonomy.docSpec.elements[name]={};
 	}
 	var spec=Xonomy.docSpec.elements[name];
@@ -211,7 +215,11 @@ Xonomy.verifyDocSpecElement=function(name) { //make sure the DocSpec object has 
 Xonomy.verifyDocSpecAttribute=function(elementName, attributeName) { //make sure the DocSpec object has such an attribute, that the attribute has everything it needs
 	var elSpec=Xonomy.docSpec.elements[elementName];
 	if(!elSpec.attributes[attributeName] || typeof(elSpec.attributes[attributeName])!="object") {
-		if(Xonomy.docSpec.unknownAttribute) elSpec.attributes[attributeName]=Xonomy.docSpec.unknownAttribute;
+		if(Xonomy.docSpec.unknownAttribute) {
+			elSpec.attributes[attributeName]=(typeof(Xonomy.docSpec.unknownAttribute)==="function")
+				? Xonomy.docSpec.unknownAttribute(elementName, attributeName)
+				: Xonomy.docSpec.unknownAttribute;
+		}
 		else elSpec.attributes[attributeName]={};
 	}
 	var spec=elSpec.attributes[attributeName];
@@ -741,9 +749,9 @@ Xonomy.click=function(htmlID, what) {
 			if(content!="") {
 				document.body.appendChild(Xonomy.makeBubble(content)); //create bubble
 				Xonomy.showBubble($("#"+htmlID+" > .name")); //anchor bubble to attribute name
-				var surrogateAttr = Xonomy.harvestAttribute(document.getElementById(htmlID));
-				$("#"+htmlID).trigger("xonomy-click-attribute", [surrogateAttr]);
 			}
+			var surrogateAttr = Xonomy.harvestAttribute(document.getElementById(htmlID));
+			$("#"+htmlID).trigger("xonomy-click-attribute", [surrogateAttr]);
 		}
 		if(!isReadOnly && what=="attributeValue") {
 			$("#"+htmlID+" > .valueContainer").addClass("current"); //make attribute value current
@@ -846,28 +854,38 @@ Xonomy.makeBubble=function(content) {
 };
 Xonomy.showBubble=function($anchor) {
 	var $bubble=$("#xonomyBubble");
-	var offset=$anchor.offset(); var left=offset.left; var top=offset.top;
+	var offset=$anchor.offset();
 	var screenWidth = $("body").width();
 	var screenHeight = $(document).height();
 	var bubbleHeight = $bubble.outerHeight();
 	var width = $anchor.width(); if (width > 40) width = 40;
 	var height = $anchor.height(); if (height > 25) height = 25;
-	if(left<screenWidth/2) {
-		if (Xonomy.mode == "laic") { width = width - 25; height = height + 10; }
-		if (screenHeight>0 && top + height + bubbleHeight > screenHeight) { // not enough room, open up
-			$bubble.css({ top: "", bottom: (screenHeight - top + 5) + "px", left: (left + width - 15) + "px" }); // 5px above for some padding. Anchor using bottom so animation opens upwards.
+	if (Xonomy.mode == "laic") { width = width - 25; height = height + 10; }
+
+	function verticalPlacement() {
+		var top = "";
+		var bottom = "";
+		if (offset.top + height + bubbleHeight <= screenHeight) {
+			// enough space - open down
+			top = (offset.top + height) + "px";
+		} else if (screenHeight - offset.top + 5 + bubbleHeight > 0) {
+			// 5px above for some padding. Anchor using bottom so animation opens upwards.
+			bottom = (screenHeight - offset.top + 5) + "px";
 		} else {
-			$bubble.css({ top: (top + height) + "px", bottom: "", left: (left + width - 15) + "px" });
+			// neither downwards nor upwards is enough space => center the bubble
+			top = (screenHeight - bubbleHeight)/2 + "px";
 		}
-	} else {
-		if(Xonomy.mode=="laic") { height=height+10; }
-		$bubble.addClass("rightAnchored");
-		if (top + height + bubbleHeight > screenHeight) { // not enough room, open up
-			$bubble.css({ top: "", bottom: (screenHeight - top + 5) + "px", right: (screenWidth - left) + "px" }); // 5px above for some padding. Anchor using bottom so animation opens upwards.
-		} else {
-			$bubble.css({ top: (top + height) + "px", bottom: "", right: (screenWidth - left) + "px" });
-		}
+		return { top: top, bottom: bottom };
 	}
+
+	var placement = verticalPlacement();
+	if(offset.left<screenWidth/2) {
+		placement.left = (offset.left + width - 15) + "px";
+	} else {
+		$bubble.addClass("rightAnchored");
+		placement.right = (screenWidth - offset.left) + "px";
+	}
+	$bubble.css(placement);
 	$bubble.slideDown("fast", function() {
 		$bubble.find(".focusme").first().focus(); //if the context menu contains anything with the class name 'focusme', focus it.
 	});
@@ -964,60 +982,59 @@ Xonomy.wyc=function(url, callback){ //a "when-you-can" function for delayed rend
 	return "<span class='wyc' id='"+wycID+"'></span>";
 };
 
+Xonomy.internalMenu=function(htmlID, items, harvest, getter, indices) {
+	indices = indices || [];
+	var fragments = items.map(function (item, i) {
+		Xonomy.verifyDocSpecMenuItem(item);
+		var jsMe=harvest(document.getElementById(htmlID));
+		var includeIt=!item.hideIf(jsMe);
+		var html="";
+		if(includeIt) {
+			indices.push(i);
+			if (item.menu) {
+				html+="<div class='menuItem'>";
+				html+="<div class='menuLabel'>"+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)))+"</div>";
+				html+=Xonomy.internalMenu(htmlID, item.menu, harvest, getter, indices);
+				html+="</div>";
+			} else {
+				html+="<div class='menuItem' onclick='Xonomy.callMenuFunction("+getter(indices)+", \""+htmlID+"\")'>";
+				html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
+				html+="</div>";
+			}
+			indices.pop();
+		}
+		return html;
+	});
+	var cls = !indices.length ? 'menu' : 'submenu';
+	return fragments.length
+		? "<div class='"+cls+"'>"+fragments.join("")+"</div>"
+		: "";
+};
 Xonomy.attributeMenu=function(htmlID) {
 	var name=$("#"+htmlID).attr("data-name"); //obtain attribute's name
 	var elName=$("#"+htmlID).closest(".element").attr("data-name"); //obtain element's name
 	Xonomy.verifyDocSpecAttribute(elName, name);
 	var spec=Xonomy.docSpec.elements[elName].attributes[name];
-	var html="";
-	for(var i=0; i<spec.menu.length; i++) {
-		var item=spec.menu[i];
-		Xonomy.verifyDocSpecMenuItem(item);
-		var jsMe=Xonomy.harvestAttribute(document.getElementById(htmlID));
-		var includeIt=!item.hideIf(jsMe);
-		if(includeIt) {
-			html+="<div class='menuItem' onclick='Xonomy.callMenuFunction(Xonomy.docSpec.elements[\""+elName+"\"].attributes[\""+name+"\"].menu["+i+"], \""+htmlID+"\")'>";
-			html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
-			html+="</div>";
-		}
+	function getter(indices) {
+		return 'Xonomy.docSpec.elements["'+elName+'"].attributes["'+name+'"].menu['+indices.join('].menu[')+']';
 	}
-	if(html!="") html="<div class='menu'>"+html+"</div>";
-	return html;
+	return Xonomy.internalMenu(htmlID, spec.menu, Xonomy.harvestAttribute, getter);
 };
 Xonomy.elementMenu=function(htmlID) {
 	var elName=$("#"+htmlID).attr("data-name"); //obtain element's name
 	var spec=Xonomy.docSpec.elements[elName];
-	var html="";
-	for(var i=0; i<spec.menu.length; i++) {
-		var item=spec.menu[i];
-		Xonomy.verifyDocSpecMenuItem(item);
-		var jsMe=Xonomy.harvestElement(document.getElementById(htmlID));
-		var includeIt=!item.hideIf(jsMe);
-		if(includeIt) {
-			html+="<div class='menuItem' onclick='Xonomy.callMenuFunction(Xonomy.docSpec.elements[\""+elName+"\"].menu["+i+"], \""+htmlID+"\")'>";
-			html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
-			html+="</div>";
-		}
+	function getter(indices) {
+		return 'Xonomy.docSpec.elements["'+elName+'"].menu['+indices.join('].menu[')+']';
 	}
-	if(html!="") html="<div class='menu'>"+html+"</div>";
-	return html;
+	return Xonomy.internalMenu(htmlID, spec.menu, Xonomy.harvestElement, getter);
 };
 Xonomy.inlineMenu=function(htmlID) {
 	var elName=$("#"+htmlID).attr("data-name"); //obtain element's name
 	var spec=Xonomy.docSpec.elements[elName];
-	var html="";
-	for(var i=0; i<spec.inlineMenu.length; i++) {
-		var item=spec.inlineMenu[i];
-		var jsMe=Xonomy.harvestElement(document.getElementById(htmlID));
-		var includeIt=!item.hideIf(Xonomy.harvestElement(document.getElementById(htmlID)));
-		if(includeIt) {
-			html+="<div class='menuItem' onclick='Xonomy.callMenuFunction(Xonomy.docSpec.elements[\""+elName+"\"].inlineMenu["+i+"], \""+htmlID+"\")'>";
-			html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
-			html+="</div>";
-		}
+	function getter(indices) {
+		return 'Xonomy.docSpec.elements["'+elName+'"].inlineMenu['+indices.join('].menu[')+']';
 	}
-	if(html!="") html="<div class='menu'>"+html+"</div>";
-	return html;
+	return Xonomy.internalMenu(htmlID, spec.inlineMenu, Xonomy.harvestElement, getter);
 };
 Xonomy.callMenuFunction=function(menuItem, htmlID) {
 	menuItem.action(htmlID, menuItem.actionParameter);
@@ -1135,12 +1152,13 @@ Xonomy.editRaw=function(htmlID, parameter) {
 	document.body.appendChild(Xonomy.makeBubble(Xonomy.askLongString(txt))); //create bubble
 	Xonomy.showBubble($(div)); //anchor bubble to element
 	Xonomy.answer=function(val) {
-		if(parameter.toJs) var jsElement=parameter.toJs(val, jsElement);
-		else if(parameter.toXml) var jsElement=Xonomy.xml2js(parameter.toXml(val, jsElement));
-		else jsElement=Xonomy.xml2js(val);
+		var jsNewElement;
+		if(parameter.toJs) jsNewElement=parameter.toJs(val, jsElement);
+		else if(parameter.toXml) jsNewElement=Xonomy.xml2js(parameter.toXml(val, jsElement));
+		else jsNewElement=Xonomy.xml2js(val);
 
 		var obj=document.getElementById(htmlID);
-		var html=Xonomy.renderElement(jsElement);
+		var html=Xonomy.renderElement(jsNewElement);
 		$(obj).replaceWith(html);
 		Xonomy.clickoff();
 		Xonomy.changed();
@@ -1149,71 +1167,78 @@ Xonomy.editRaw=function(htmlID, parameter) {
 
 Xonomy.draggingID=null; //what are we dragging?
 Xonomy.drag=function(ev) { //called when dragging starts
-	Xonomy.clickoff();
+	// Wrapping all the code into a timeout handler is a workaround for a Chrome browser bug
+	// (if the DOM is manipulated in the 'dragStart' event then 'dragEnd' event is sometimes fired immediately)
+	//
+	// for more details @see:
+	//   http://stackoverflow.com/questions/19639969/html5-dragend-event-firing-immediately
 	var htmlID=ev.target.parentNode.parentNode.id;
-	var $element=$("#"+htmlID);
-	var elementName=$element.attr("data-name");
-	var elSpec=Xonomy.docSpec.elements[elementName];
-	$element.addClass("dragging");
-	$(".xonomy .children").append("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
-	$(".xonomy .children .element").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
-	$(".xonomy .children .text").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
-	$(".xonomy .dragging .elementDropper").remove(); //remove drop targets fom inside the element being dragged
-	$(".xonomy .dragging").prev(".elementDropper").remove(); //remove drop targets from immediately before the element being dragged
-	$(".xonomy .dragging").next(".elementDropper").remove(); //remove drop targets from immediately after the element being dragged
-	$(".xonomy .element.readonly .elementDropper").remove(); //remove drop targets from inside read-only elements
-	if(elSpec.localDropOnly(Xonomy.harvest(htmlID))) {
-		if(elSpec.canDropTo) { //remove the drop target from elements that are not the dragged element's parent
+	ev.dataTransfer.setData("text", htmlID);
+	setTimeout(function() {
+		Xonomy.clickoff();
+		var $element=$("#"+htmlID);
+		var elementName=$element.attr("data-name");
+		var elSpec=Xonomy.docSpec.elements[elementName];
+		$element.addClass("dragging");
+		$(".xonomy .children").append("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
+		$(".xonomy .children .element").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
+		$(".xonomy .children .text").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
+		$(".xonomy .dragging .elementDropper").remove(); //remove drop targets fom inside the element being dragged
+		$(".xonomy .dragging").prev(".elementDropper").remove(); //remove drop targets from immediately before the element being dragged
+		$(".xonomy .dragging").next(".elementDropper").remove(); //remove drop targets from immediately after the element being dragged
+		$(".xonomy .element.readonly .elementDropper").remove(); //remove drop targets from inside read-only elements
+		if(elSpec.localDropOnly(Xonomy.harvest(htmlID))) {
+			if(elSpec.canDropTo) { //remove the drop target from elements that are not the dragged element's parent
+				var droppers=$(".xonomy .elementDropper").toArray();
+				for(var i=0; i<droppers.length; i++) {
+					var dropper=droppers[i];
+					if(dropper.parentNode!=ev.target.parentNode.parentNode.parentNode) {
+						dropper.parentNode.removeChild(dropper);
+					}
+				}
+			}
+		}
+		if(elSpec.canDropTo) { //remove the drop target from elements it cannot be dropped into
 			var droppers=$(".xonomy .elementDropper").toArray();
 			for(var i=0; i<droppers.length; i++) {
 				var dropper=droppers[i];
-				if(dropper.parentNode!=ev.target.parentNode.parentNode.parentNode) {
+				var parentElementName=$(dropper.parentNode.parentNode).toArray()[0].getAttribute("data-name");
+				if($.inArray(parentElementName, elSpec.canDropTo)<0) {
 					dropper.parentNode.removeChild(dropper);
 				}
 			}
 		}
-	}
-	if(elSpec.canDropTo) { //remove the drop target from elements it cannot be dropped into
-		var droppers=$(".xonomy .elementDropper").toArray();
-		for(var i=0; i<droppers.length; i++) {
-			var dropper=droppers[i];
-			var parentElementName=$(dropper.parentNode.parentNode).toArray()[0].getAttribute("data-name");
-			if($.inArray(parentElementName, elSpec.canDropTo)<0) {
-				dropper.parentNode.removeChild(dropper);
-			}
-		}
-	}
-	if(elSpec.mustBeBefore) { //remove the drop target from after elements it cannot be after
-		var jsElement=Xonomy.harvestElement($element.toArray()[0]);
-		var droppers=$(".xonomy .elementDropper").toArray();
-		for(var i=0; i<droppers.length; i++) {
-			var dropper=droppers[i];
-			jsElement.internalParent=Xonomy.harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
-			var mustBeBefore=elSpec.mustBeBefore(jsElement);
-			for(var ii=0; ii<mustBeBefore.length; ii++) {
-				if( $(dropper).prevAll("*[data-name='"+mustBeBefore[ii]+"']").toArray().length>0 ) {
-					dropper.parentNode.removeChild(dropper);
+		if(elSpec.mustBeBefore) { //remove the drop target from after elements it cannot be after
+			var jsElement=Xonomy.harvestElement($element.toArray()[0]);
+			var droppers=$(".xonomy .elementDropper").toArray();
+			for(var i=0; i<droppers.length; i++) {
+				var dropper=droppers[i];
+				jsElement.internalParent=Xonomy.harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
+				var mustBeBefore=elSpec.mustBeBefore(jsElement);
+				for(var ii=0; ii<mustBeBefore.length; ii++) {
+					if( $(dropper).prevAll("*[data-name='"+mustBeBefore[ii]+"']").toArray().length>0 ) {
+						dropper.parentNode.removeChild(dropper);
+					}
 				}
 			}
 		}
-	}
-	if(elSpec.mustBeAfter) { //remove the drop target from before elements it cannot be before
-		var jsElement=Xonomy.harvestElement($element.toArray()[0]);
-		var droppers=$(".xonomy .elementDropper").toArray();
-		for(var i=0; i<droppers.length; i++) {
-			var dropper=droppers[i];
-			jsElement.internalParent=Xonomy.harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
-			var mustBeAfter=elSpec.mustBeAfter(jsElement);
-			for(var ii=0; ii<mustBeAfter.length; ii++) {
-				if( $(dropper).nextAll("*[data-name='"+mustBeAfter[ii]+"']").toArray().length>0 ) {
-					dropper.parentNode.removeChild(dropper);
+		if(elSpec.mustBeAfter) { //remove the drop target from before elements it cannot be before
+			var jsElement=Xonomy.harvestElement($element.toArray()[0]);
+			var droppers=$(".xonomy .elementDropper").toArray();
+			for(var i=0; i<droppers.length; i++) {
+				var dropper=droppers[i];
+				jsElement.internalParent=Xonomy.harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
+				var mustBeAfter=elSpec.mustBeAfter(jsElement);
+				for(var ii=0; ii<mustBeAfter.length; ii++) {
+					if( $(dropper).nextAll("*[data-name='"+mustBeAfter[ii]+"']").toArray().length>0 ) {
+						dropper.parentNode.removeChild(dropper);
+					}
 				}
 			}
 		}
-	}
-	Xonomy.draggingID=htmlID;
-	ev.dataTransfer.setData("text", htmlID);
-	Xonomy.refresh();
+		Xonomy.draggingID=htmlID;
+		Xonomy.refresh();
+	}, 10);
 };
 Xonomy.dragOver=function(ev) {
 	ev.preventDefault();
