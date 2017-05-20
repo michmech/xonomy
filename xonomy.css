@@ -1,7 +1,7 @@
 /*NERD MODE*/
 .xonomy.nerd { font-family: monospace; font-size: 1rem; cursor: default; background-color: #ffffff;
 	-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
-	line-height: 1.5em; padding-left: 5px; }
+	line-height: 2em; padding-left: 5px; }
 .xonomy.nerd * { position: relative; }
 
 /*Inline formatting of names, values, punctuation*/
@@ -16,7 +16,7 @@
 .xonomy.nerd .element > .tag.opening > .attributes > .attribute > .name { color: #ff4455; cursor: pointer; }
 .xonomy.nerd .element > .tag.opening > .attributes > .attribute > .valueContainer { cursor: pointer; }
 .xonomy.nerd .element > .tag.opening > .attributes > .attribute > .valueContainer > .value { color: #666666; }
-.xonomy.nerd .element > .children > .textnode > .value { color: #000000; cursor: pointer; line-height: 2em; }
+.xonomy.nerd .element > .children > .textnode > .value { color: #000000; cursor: pointer; }
 .xonomy.nerd .element > .children > .textnode > .value > .insertionPoint { display: none; }
 .xonomy.nerd .element > .children > .textnode > .value > .dots { display: none; }
 
@@ -53,8 +53,8 @@
 
 /*Block layout*/
 .xonomy.nerd .element { padding-left: 25px; margin-top: 5px; margin-bottom: 5px; }
-.xonomy.nerd .element .connector { border-top: 1px dotted #b6b6b6; width: 24px; height: 10px; position: absolute; top: 12px; left: 0px; }
-.xonomy.nerd .element.oneliner .connector { top: 15px; }
+.xonomy.nerd .element .connector { border-top: 1px dotted #b6b6b6; width: 24px; height: 10px; position: absolute; top: 17px; left: 0px; }
+.xonomy.nerd .element.oneliner .connector { top: 17px; }
 .xonomy.nerd .element .children { margin-left: 10px; border-left: 1px dotted #cccccc; padding-top: 1px; padding-bottom: 1px; }
 .xonomy.nerd .element .children .textnode { padding-left: 25px; margin-top: 5px; margin-bottom: 5px; }
 
