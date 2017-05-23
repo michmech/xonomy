@@ -156,6 +156,8 @@
 #xonomyBubble.nerd #xonomyBubbleContent div.menuItem { padding: 8px 20px 7px 10px; border-top: 1px solid #dddddd; cursor: pointer; margin-top: -1px; background-color: #ffffff;}
 #xonomyBubble.nerd #xonomyBubbleContent div.menuItem div.menuLabel {margin: -8px -20px -7px -10px; padding: 8px 20px 7px 30px; background-color: #ffffff; background-image: url(plus.gif); background-position: 10px center; background-repeat: no-repeat; font-weight: bold;}
 #xonomyBubble.nerd #xonomyBubbleContent div.menuItem div.menuLabel:hover {background-color: #ffffcc;}
+#xonomyBubble.nerd #xonomyBubbleContent div.menuItem span.icon {display: inline-block; margin: -8px 0px -7px 0px; width: 18px;}
+#xonomyBubble.nerd #xonomyBubbleContent div.menuItem span.icon img {max-height: 15px; max-width: 20px; display: inline-block;}
 #xonomyBubble.nerd #xonomyBubbleContent div.submenu { margin: 0px -20px -7px -10px; display: none; }
 #xonomyBubble.nerd #xonomyBubbleContent div.submenu div.menuItem { padding-left: 30px; }
 #xonomyBubble.nerd #xonomyBubbleContent div.menuItem.expanded div.menuLabel {background-image: url(minus.gif);}

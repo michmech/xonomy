@@ -728,9 +728,11 @@ Xonomy.updateCollapsoid=function(htmlID) {
 	$element.children(".childrenCollapsed").html(whisper);
 };
 
+Xonomy.lastClickWhat="";
 Xonomy.click=function(htmlID, what) {
 	if(!Xonomy.notclick) {
 		Xonomy.clickoff();
+		Xonomy.lastClickWhat=what;
 		$(".xonomy .char.on").removeClass("on");
 		var isReadOnly=( $("#"+htmlID).hasClass("readonly") || $("#"+htmlID).closest(".readonly").toArray().length>0 );
 		if(!isReadOnly && (what=="openingTagName" || what=="closingTagName") ) {
@@ -997,14 +999,15 @@ Xonomy.internalMenu=function(htmlID, items, harvest, getter, indices) {
 		var html="";
 		if(includeIt) {
 			indices.push(i);
+			var icon=""; if(item.icon) icon="<span class='icon'><img src='"+item.icon+"'/></span> ";
 			if (item.menu) {
 				html+="<div class='menuItem'>";
-				html+="<div class='menuLabel' onclick='Xonomy.toggleSubmenu(this.parentNode)'>"+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)))+"</div>";
+				html+="<div class='menuLabel' onclick='Xonomy.toggleSubmenu(this.parentNode)'>"+icon+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)))+"</div>";
 				html+=Xonomy.internalMenu(htmlID, item.menu, harvest, getter, indices);
 				html+="</div>";
 			} else {
 				html+="<div class='menuItem' onclick='Xonomy.callMenuFunction("+getter(indices)+", \""+htmlID+"\")'>";
-				html+=Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
+				html+=icon+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
 				html+="</div>";
 			}
 			indices.pop();
