@@ -1,9 +1,13 @@
 #xonomyBubble .menuItem:focus {background-color: #f5f5f5 !important; outline: none;}
 #xonomyBubble .menuLabel:focus {background-color: #f5f5f5 !important; outline: none;}
-.xonomy:focus {outline: none;}
+.xonomy:focus {outline: none; }
 .xonomy .tag.focused > .name { outline: 1px dotted #666666; }
 .xonomy .textnode.focused { margin-left: -2px !important; }
 .xonomy .textnode.focused > .value { border: 1px dotted #666666; }
+.xonomy .attribute.focused .attributeName { outline: 1px dotted #666666; }
+.xonomy .attributeValue.focused { outline: 1px dotted #666666; }
+.xonomy .childrenCollapsed.focused { outline: 1px dotted #666666; background-color: #ffff99 !important; }
+.xonomy .rollouter.focused { border: 1px dotted #666666 !important; background-color: #ffff99 !important; margin-left: 2px !important; }
 
 /*NERD MODE*/
 .xonomy.nerd { font-family: monospace; font-size: 1rem; cursor: default; background-color: #ffffff;
