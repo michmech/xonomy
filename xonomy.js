@@ -1397,9 +1397,9 @@ Xonomy.key=function(event){
 			Xonomy.click(Xonomy.currentHtmlId, Xonomy.currentFocus);
 			Xonomy.clickoff();
 		} else if(event.ctrlKey && event.which==40) { //down key with Ctrl
-			Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()+100 );
+			Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()+60 );
 		} else if(event.ctrlKey && event.which==38) { //up key with Ctrl
-			Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()-100 );
+			Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()-60 );
 		} else if(event.ctrlKey && [37, 39].indexOf(event.which)>-1) { //arrow keys with Ctrl
 			var $el=$("#"+Xonomy.currentHtmlId);
 			if($el.hasClass("element") && !$el.hasClass("uncollapsible")){
