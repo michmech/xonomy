@@ -1369,7 +1369,7 @@ Xonomy.startKeyNav=function(keyboardEventCatcher, scrollableContainer){
 	var $keyboardEventCatcher=$(keyboardEventCatcher); if(!keyboardEventCatcher) $keyboardEventCatcher=$(".xonomy");
 	$scrollableContainer=$(scrollableContainer); if(!scrollableContainer) $scrollableContainer=$keyboardEventCatcher;
 	$keyboardEventCatcher.attr("tabindex", "0");
-	$keyboardEventCatcher.on("keyup", Xonomy.key);
+	$keyboardEventCatcher.on("keydown", Xonomy.key);
 	$(document).on("keydown", function(e) { if([32, 37, 38, 39, 40].indexOf(e.keyCode)>-1 && $("input:focus, select:focus, textarea:focus").length==0) e.preventDefault(); }); //prevent default browser scrolling on arrow keys
 	Xonomy.keyboardEventCatcher=$keyboardEventCatcher;
 	Xonomy.scrollableContainer=$scrollableContainer;
@@ -1396,11 +1396,11 @@ Xonomy.key=function(event){
 			if(Xonomy.currentFocus=="childrenCollapsed") Xonomy.plusminus(Xonomy.currentHtmlId, true);
 			Xonomy.click(Xonomy.currentHtmlId, Xonomy.currentFocus);
 			Xonomy.clickoff();
-		} else if(event.ctrlKey && event.which==40) { //down key with Ctrl
+		} else if((event.ctrlKey || event.metaKey) && event.which==40) { //down key with Ctrl or Cmd (Mac OS)
 			Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()+60 );
-		} else if(event.ctrlKey && event.which==38) { //up key with Ctrl
+		} else if((event.ctrlKey || event.metaKey) && event.which==38) { //up key with Ctrl or Cmd (Mac OS)
 			Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()-60 );
-		} else if(event.ctrlKey && [37, 39].indexOf(event.which)>-1) { //arrow keys with Ctrl
+		} else if((event.ctrlKey || event.metaKey) && [37, 39].indexOf(event.which)>-1) { //arrow keys with Ctrl or Cmd (Mac OS)
 			var $el=$("#"+Xonomy.currentHtmlId);
 			if($el.hasClass("element") && !$el.hasClass("uncollapsible")){
 				if(event.which==39 && $el.hasClass("collapsed")) { //expand it!
