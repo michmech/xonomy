@@ -1015,10 +1015,17 @@ Xonomy.pickerMenu=function(picklist, defaultString){
 		var item=picklist[i];
 		if(typeof(item)=="string") item={value: item, caption: ""};
 		html+="<div class='menuItem focusme techno"+(item.value==defaultString?" current":"")+"' tabindex='1' onclick='Xonomy.answer(\""+Xonomy.xmlEscape(item.value)+"\")'>";
+		var alone=true;
 		html+="<span class='punc'>\"</span>";
-		if(item.displayValue) html+=Xonomy.textByLang(item.displayValue); else html+=Xonomy.xmlEscape(item.value);
+		if(item.displayValue) {
+			html+=Xonomy.textByLang(item.displayValue);
+			alone=false;
+		} else {
+			html+=Xonomy.xmlEscape(item.value);
+			if(item.value) alone=false;
+		}
 		html+="<span class='punc'>\"</span>";
-		if(item.caption!="") html+=" <span class='explainer'>"+Xonomy.xmlEscape(Xonomy.textByLang(item.caption))+"</span>";
+		if(item.caption!="") html+=" <span class='explainer "+(alone?"alone":"")+"'>"+Xonomy.xmlEscape(Xonomy.textByLang(item.caption))+"</span>";
 		html+="</div>";
 	}
 	html+="</div>";

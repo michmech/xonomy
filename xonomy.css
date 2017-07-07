@@ -384,6 +384,7 @@
 #xonomyBubble.laic #xonomyBubbleContent .techno span.atValue { font-family: monospace; font-size: 0.75rem; color: #444444; }
 #xonomyBubble.laic #xonomyBubbleContent span.techno span.elName { font-family: Verdana, sans-serif; font-weight: bold; color: #315696; }
 #xonomyBubble.laic #xonomyBubbleContent div.menuItem.techno span.explainer { font-family: Verdana, sans-serif; font-size: 0.75rem; color: #999999; font-weight: normal; margin-left: 0.5em; }
+#xonomyBubble.laic #xonomyBubbleContent div.menuItem.techno span.explainer.alone {margin-left: 0px;}
 #xonomyBubble.laic #xonomyBubbleContent div.menuItem.current { x-background-color: #ffffdd; }
 #xonomyBubble.laic #xonomyBubbleContent div.menuItem:hover { background-color: #f6f6f6; }
 
