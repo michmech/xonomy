@@ -975,13 +975,25 @@ Xonomy.askRemote=function(defaultString, param, jsMe) {
 		if(param.createUrl) html+=" <button class='buttonCreate' onclick='return Xonomy.remoteCreate(\""+Xonomy.xmlEscape(param.createUrl, true)+"\", \""+Xonomy.xmlEscape( (param.searchUrl?param.searchUrl:param.url) , true)+"\", \""+Xonomy.xmlEscape(param.urlPlaceholder, true)+"\", \""+Xonomy.xmlEscape(Xonomy.jsEscape(defaultString))+"\")'>&nbsp;</button>";
 		html+="</form>";
 	}
-	html+=Xonomy.wyc(param.url, function(picklist){ return Xonomy.pickerMenu(picklist, defaultString); });
+	html+=Xonomy.wyc(param.url, function(picklist){
+		var items=[];
+		if(param.add) for(var i=0; i<param.add.length; i++) items.push(param.add[i]);
+		for(var i=0; i<picklist.length; i++) items.push(picklist[i]);
+		return Xonomy.pickerMenu(items, defaultString);
+	});
+	Xonomy.lastAskerParam=param;
 	return html;
 };
+Xonomy.lastAskerParam=null;
 Xonomy.remoteSearch=function(searchUrl, urlPlaceholder, defaultString){
 	var text=$("#xonomyBubble input.textbox").val();
 	searchUrl=searchUrl.replace(urlPlaceholder, encodeURIComponent(text));
-	$("#xonomyBubble .menu").replaceWith( Xonomy.wyc(searchUrl, function(picklist){ return Xonomy.pickerMenu(picklist, defaultString); }) );
+	$("#xonomyBubble .menu").replaceWith( Xonomy.wyc(searchUrl, function(picklist){
+		var items=[];
+		if(text=="" && Xonomy.lastAskerParam.add) for(var i=0; i<Xonomy.lastAskerParam.add.length; i++) items.push(Xonomy.lastAskerParam.add[i]);
+		for(var i=0; i<picklist.length; i++) items.push(picklist[i]);
+		return Xonomy.pickerMenu(items, defaultString);
+	}));
 	return false;
 };
 Xonomy.remoteCreate=function(createUrl, searchUrl, urlPlaceholder, defaultString){
