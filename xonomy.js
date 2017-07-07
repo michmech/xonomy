@@ -332,7 +332,7 @@ Xonomy.refresh=function() {
 		if(elSpec.displayName) $(this).children(".tag").children(".name").html(Xonomy.textByLang(elSpec.displayName(Xonomy.harvestElement(this))));
 		if(elSpec.caption) {
 			var jsEl=Xonomy.harvestElement(this);
-			if(!jsEl.hasElements()) $(this).children(".inlinecaption").html(Xonomy.textByLang(elSpec.caption(jsEl)));
+			if(!jsEl.hasElements()) $(this).children(".inlinecaption").html("&nbsp;"+Xonomy.textByLang(elSpec.caption(jsEl))+"&nbsp;");
 		}
 		if(elSpec.displayValue) {
 			var jsEl=Xonomy.harvestElement(this);
@@ -342,7 +342,7 @@ Xonomy.refresh=function() {
 			var atSpec=elSpec.attributes[this.getAttribute("data-name")];
 			if(atSpec.displayName) $(this).children(".name").html(Xonomy.textByLang(atSpec.displayName(Xonomy.harvestAttribute(this))));
 			if(atSpec.displayValue) $(this).children(".value").html(Xonomy.textByLang(atSpec.displayValue(Xonomy.harvestAttribute(this))));
-			if(atSpec.caption) $(this).children(".inlinecaption").html(Xonomy.textByLang(atSpec.caption(Xonomy.harvestAttribute(this))));
+			if(atSpec.caption) $(this).children(".inlinecaption").html("&nbsp;"+Xonomy.textByLang(atSpec.caption(Xonomy.harvestAttribute(this)))+"&nbsp;");
 		});
 	});
 };

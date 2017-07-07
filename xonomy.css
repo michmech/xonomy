@@ -46,7 +46,8 @@
 .xonomy.nerd .element > .children > .textnode.current > .value { background-color: #ffff99 !important; color: #00cc00; padding: 0px 3px; margin: 0px -3px; border-radius: 2px; }
 
 /*Read-only stuff*/
-.xonomy.nerd .readonly * { color: #aaaaaa !important; cursor: default !important; }
+.xonomy.nerd .readonly * { color: #aaaaaa !important; cursor: default !important;
+	-webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; cursor: text !important;}
 .xonomy.nerd .element.readonly.draggable > .connector > .draghandle { cursor: move !important; }
 .xonomy.nerd .element.readonly .warner .inside { cursor: pointer !important; }
 .xonomy.nerd .readonly .plusminus { cursor: pointer !important; }
@@ -154,7 +155,9 @@
 .xonomy.nerd .attribute.invalid > .warner { display: inline-block; }
 
 /*Caption beside attribute values and elements*/
-.xonomy.nerd .inlinecaption { font-family: Verdana, sans-serif; font-size: 0.8rem; color: #999999; font-weight: normal; margin-left: 4px; margin-right: 4px; }
+.xonomy.nerd .inlinecaption { font-family: Verdana, sans-serif; font-size: 0.8rem; color: #999999; font-weight: normal;
+	-webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; cursor: text !important;
+	}
 
 /*Pop-up box*/
 #xonomyBubble.nerd { display: none; position: absolute; z-index: 10; min-width: 100px; }
@@ -248,9 +251,10 @@
 .xonomy.laic .element.collapsed > .childrenCollapsed:hover { background-color: #f4f4f4; }
 
 /*Caption beside attribute values and elements*/
-.xonomy.laic .attribute > .inlinecaption { font-family: Verdana, sans-serif; font-size: 0.75rem; color: #999999; font-weight: normal; margin-left: 10px; margin-right: 4px; }
+.xonomy.laic .inlinecaption {-webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; cursor: text !important;}
+.xonomy.laic .attribute > .inlinecaption { font-family: Verdana, sans-serif; font-size: 0.75rem; color: #999999; font-weight: normal; margin-left: 5px; margin-right: 4px; }
 .xonomy.laic .element > .inlinecaption { font-family: Verdana, sans-serif; font-size: 0.75rem; color: #999999; font-weight: normal; margin-left: 50px; margin-right: 0px; margin-top: 5px; display: block; }
-.xonomy.laic .element.oneliner > .inlinecaption { display: inline; margin-left: 10px; margin-right: 4px; }
+.xonomy.laic .element.oneliner > .inlinecaption { display: inline; margin-left: 5px; margin-right: 4px; }
 .xonomy.laic .element.collapsed > .inlinecaption { display: none; }
 
 /*Elements with no children*/
@@ -341,7 +345,8 @@
 .xonomy.laic .attribute.invalid > .warner { display: inline-block; }
 
 /*Read-only stuff*/
-.xonomy.laic .readonly * { color: #aaaaaa !important; cursor: default !important; }
+.xonomy.laic .readonly * { color: #aaaaaa !important; cursor: default !important;
+ 	-webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; cursor: text !important;}
 .xonomy.laic .element.readonly.draggable > .connector > .draghandle { cursor: move !important; }
 .xonomy.laic .element.readonly .warner .inside { cursor: pointer !important; }
 .xonomy.laic .readonly .plusminus { cursor: pointer !important; }
