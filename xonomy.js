@@ -1410,16 +1410,26 @@ Xonomy.setFocus=function(htmlID, what){
 Xonomy.key=function(event){
 	if(!Xonomy.notKeyUp && !$("#xonomyBubble").length>0 ) {
 		if(event.which==27) {
+			event.preventDefault();
+			event.stopImmediatePropagation();
 			Xonomy.destroyBubble(); //escape key
 		} else if(event.which==13){ //enter key
+			event.preventDefault();
+			event.stopImmediatePropagation();
 			if(Xonomy.currentFocus=="childrenCollapsed") Xonomy.plusminus(Xonomy.currentHtmlId, true);
 			Xonomy.click(Xonomy.currentHtmlId, Xonomy.currentFocus);
 			Xonomy.clickoff();
 		} else if((event.ctrlKey || event.metaKey) && event.which==40) { //down key with Ctrl or Cmd (Mac OS)
+			event.preventDefault();
+			event.stopImmediatePropagation();
 			Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()+60 );
 		} else if((event.ctrlKey || event.metaKey) && event.which==38) { //up key with Ctrl or Cmd (Mac OS)
+			event.preventDefault();
+			event.stopImmediatePropagation();
 			Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()-60 );
 		} else if((event.ctrlKey || event.metaKey) && [37, 39].indexOf(event.which)>-1) { //arrow keys with Ctrl or Cmd (Mac OS)
+			event.preventDefault();
+			event.stopImmediatePropagation();
 			var $el=$("#"+Xonomy.currentHtmlId);
 			if($el.hasClass("element") && !$el.hasClass("uncollapsible")){
 				if(event.which==39 && $el.hasClass("collapsed")) { //expand it!
@@ -1429,7 +1439,9 @@ Xonomy.key=function(event){
 					Xonomy.plusminus(Xonomy.currentHtmlId);
 				}
 			}
-		} else if([37, 38, 39, 40].indexOf(event.which)>-1) { //arrow keys
+		} else if([37, 38, 39, 40].indexOf(event.which)>-1 && !event.altKey) { //arrow keys
+			event.preventDefault();
+			event.stopImmediatePropagation();
 			if(!Xonomy.currentHtmlId) { //nothing is current yet
 				Xonomy.setFocus($(".xonomy .element").first().prop("id"), "openingTagName");
 			} else if($(".xonomy .focused").length==0) { //something is current but nothing is focused yet
