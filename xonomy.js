@@ -442,6 +442,13 @@ Xonomy.render=function(data, editor, docSpec) { //renders the contents of an edi
 	editor.innerHTML=Xonomy.renderElement(data, editor);
 	$(editor).show();
 
+	if(docSpec.allowModeSwitching){
+		$("<div class='modeSwitcher'></div>").appendTo($(editor)).on("click", function(e){
+			if(Xonomy.mode=="nerd") Xonomy.setMode("laic"); else Xonomy.setMode("nerd");
+			if(docSpec.onModeSwitch) docSpec.onModeSwitch(Xonomy.mode);
+		});
+	}
+
 	//Make sure the "click off" handler is attached:
 	$(document.body).off("click", Xonomy.clickoff);
 	$(document.body).on("click", Xonomy.clickoff);
