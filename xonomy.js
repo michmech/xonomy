@@ -722,7 +722,7 @@ Xonomy.updateCollapsoid=function(htmlID) {
 	} else {
 		var abbreviated=false;
 		$element.find(".textnode").each(function(){
-			var txt=Xonomy.harvestText(this).value;
+			var txt=$(this).text();
 			for(var i=0; i<txt.length; i++) {
 				if(whisper.length<35) whisper+=txt[i]; else abbreviated=true;
 			}
