@@ -1500,7 +1500,7 @@ Xonomy.goDown=function(){
 	}
 };
 Xonomy.goUp=function(){
-	if(Xonomy.currentFocus!="openingTagName" && Xonomy.currentFocus!="closingTagName" && Xonomy.currentFocus!="char") {
+	if(Xonomy.currentFocus!="openingTagName" && Xonomy.currentFocus!="closingTagName" && Xonomy.currentFocus!="char" && Xonomy.currentFocus!="text") {
 		Xonomy.goLeft();
 	} else {
 		var $el=$("#"+Xonomy.currentHtmlId);
