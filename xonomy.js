@@ -949,17 +949,19 @@ Xonomy.showBubble=function($anchor) {
 };
 
 Xonomy.askString=function(defaultString, askerParameter, jsMe) {
+	var width=$(".xonomy").width()*.5;
 	var html="";
 	html+="<form onsubmit='Xonomy.answer(this.val.value); return false'>";
-		html+="<input name='val' class='textbox focusme' value='"+Xonomy.xmlEscape(defaultString)+"' onkeyup='Xonomy.notKeyUp=true'/>";
+		html+="<input name='val' class='textbox focusme' style='width: "+width+"px;' value='"+Xonomy.xmlEscape(defaultString)+"' onkeyup='Xonomy.notKeyUp=true'/>";
 		html+=" <input type='submit' value='OK'>";
 	html+="</form>";
 	return html;
 };
 Xonomy.askLongString=function(defaultString, askerParameter, jsMe) {
+	var width=$(".xonomy").width()*.75;
 	var html="";
 	html+="<form onsubmit='Xonomy.answer(this.val.value); return false'>";
-		html+="<textarea name='val' class='textbox focusme' spellcheck='false'>"+Xonomy.xmlEscape(defaultString)+"</textarea>";
+		html+="<textarea name='val' class='textbox focusme' spellcheck='false' style='width: "+width+"px; height: 150px;'>"+Xonomy.xmlEscape(defaultString)+"</textarea>";
 		html+="<div class='submitline'><input type='submit' value='OK'></div>";
 	html+="</form>";
 	return html;
