@@ -1538,7 +1538,7 @@ Xonomy.goRight=function(){
 	if(Xonomy.currentFocus=="rollouter") var $me=$el.find(".rollouter").first();
 
 	var $candidates=$(".xonomy .focusable:visible");
-	$candidates=$candidates.not(".char").add(".hasInlineMenu > .children > .textnode .char");
+	$candidates=$candidates.not(".char").add(".hasInlineMenu > .children > .textnode .char:visible");
 
 	var $next=$candidates.eq( $candidates.index($me[0])+1 );
 	if($next.hasClass("attributeName")) Xonomy.setFocus($next.closest(".attribute").prop("id"), "attributeName");
@@ -1561,7 +1561,7 @@ Xonomy.goLeft=function(){
 	if(Xonomy.currentFocus=="rollouter") var $me=$el.find(".rollouter").first();
 
 	var $candidates=$(".xonomy .focusable:visible");
-	$candidates=$candidates.not(".char").add(".hasInlineMenu > .children > .textnode .char");
+	$candidates=$candidates.not(".char").add(".hasInlineMenu > .children > .textnode .char:visible");
 
 	var $next=$candidates.eq( $candidates.index($me[0])-1 );
 	if($next.hasClass("attributeName")) Xonomy.setFocus($next.closest(".attribute").prop("id"), "attributeName");
