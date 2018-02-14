@@ -1504,6 +1504,7 @@ Xonomy.drag=function(ev) { //called when dragging starts
 	//
 	// for more details @see:
 	//   http://stackoverflow.com/questions/19639969/html5-dragend-event-firing-immediately
+	ev.dataTransfer.effectAllowed="move"; //only allow moving (and not eg. copying]
 	var htmlID=ev.target.parentNode.parentNode.id;
 	ev.dataTransfer.setData("text", htmlID);
 	setTimeout(function() {
@@ -1515,6 +1516,7 @@ Xonomy.drag=function(ev) { //called when dragging starts
 };
 Xonomy.dragOver=function(ev) {
 	ev.preventDefault();
+	ev.dataTransfer.dropEffect="move"; //only allow moving (and not eg. copying]
 	if($(ev.currentTarget).hasClass("layby")){
 		$(ev.currentTarget).addClass("activeDropper");
 	} else {
