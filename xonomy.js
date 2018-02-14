@@ -1205,9 +1205,12 @@ Xonomy.deleteElement=function(htmlID, parameter) {
 	var obj=document.getElementById(htmlID);
 	var parentID=obj.parentNode.parentNode.id;
 	$(obj).fadeOut(function(){
-		obj.parentNode.removeChild(obj);
+		var parentNode=obj.parentNode;
+		parentNode.removeChild(obj);
 		Xonomy.changed();
-		window.setTimeout(function(){ Xonomy.setFocus(parentID, "openingTagName");  }, 100);
+		if($(parentNode).closest(".layby").length==0) {
+			window.setTimeout(function(){ Xonomy.setFocus(parentID, "openingTagName");  }, 100);
+		}
 	});
 };
 Xonomy.newAttribute=function(htmlID, parameter) {
