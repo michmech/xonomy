@@ -1136,10 +1136,13 @@ Xonomy.internalMenu=function(htmlID, items, harvest, getter, indices) {
 			indices.push(i);
 			var icon=""; if(item.icon) icon="<span class='icon'><img src='"+item.icon+"'/></span> ";
 			if (item.menu) {
-				html+="<div class='menuItem'>";
-				html+="<div class='menuLabel focusme' tabindex='0' onclick='Xonomy.toggleSubmenu(this.parentNode)'>"+icon+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)))+"</div>";
-				html+=Xonomy.internalMenu(htmlID, item.menu, harvest, getter, indices);
-				html+="</div>";
+				var internalHtml=Xonomy.internalMenu(htmlID, item.menu, harvest, getter, indices);
+				if(internalHtml!="<div class='submenu'></div>") {
+					html+="<div class='menuItem'>";
+					html+="<div class='menuLabel focusme' tabindex='0' onclick='Xonomy.toggleSubmenu(this.parentNode)'>"+icon+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)))+"</div>";
+					html+=internalHtml;
+					html+="</div>";
+				}
 			} else {
 				html+="<div class='menuItem focusme' tabindex='0' onclick='Xonomy.callMenuFunction("+getter(indices)+", \""+htmlID+"\")'>";
 				html+=icon+Xonomy.formatCaption(Xonomy.textByLang(item.caption(jsMe)));
