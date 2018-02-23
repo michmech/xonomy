@@ -1439,6 +1439,7 @@ Xonomy.mergeElements=function(elDead, elLive){
 		Xonomy.setFocus(elLive.htmlID, "openingTagName");
 		Xonomy.replace(elLive.htmlID, elLive);
 		for(var i=0; i<elLive.children.length; i++) if(elLive.children[i].type=="element") Xonomy.elementReorder(elLive.children[i].htmlID);
+		Xonomy.changed();
 	} else {
 		window.setTimeout(function(){ Xonomy.setFocus(htmlID, "openingTagName"); }, 100);
 	}
