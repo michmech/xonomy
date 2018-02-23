@@ -1450,14 +1450,22 @@ Xonomy.insertDropTargets=function(htmlID){
 	$element.addClass("dragging");
 	var elementName=$element.attr("data-name");
 	var elSpec=Xonomy.docSpec.elements[elementName];
-	$(".xonomy .children").append("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
-	$(".xonomy .children .element").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
-	$(".xonomy .children .text").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
-	$(".xonomy .dragging .elementDropper").remove(); //remove drop targets fom inside the element being dragged
+	$(".xonomy .children:visible").append("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
+	$(".xonomy .children:visible > .element").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
+	$(".xonomy .children:visible > .text").before("<div class='elementDropper' ondragover='Xonomy.dragOver(event)' ondragleave='Xonomy.dragOut(event)' ondrop='Xonomy.drop(event)'><div class='inside'></div></div>")
+	$(".xonomy .dragging .children:visible > .elementDropper").remove(); //remove drop targets fom inside the element being dragged
 	$(".xonomy .dragging").prev(".elementDropper").remove(); //remove drop targets from immediately before the element being dragged
 	$(".xonomy .dragging").next(".elementDropper").remove(); //remove drop targets from immediately after the element being dragged
-	$(".xonomy .element.readonly .elementDropper").remove(); //remove drop targets from inside read-only elements
-	if(elSpec.localDropOnly(Xonomy.harvest(htmlID))) {
+	$(".xonomy .children:visible > .element.readonly .elementDropper").remove(); //remove drop targets from inside read-only elements
+
+	var harvestCache={};
+	var harvestElement=function(div){
+		var htmlID=$(div).prop("id");
+		if(!harvestCache[htmlID]) harvestCache[htmlID]=Xonomy.harvestElement(div);
+		return harvestCache[htmlID];
+	};
+
+	if(elSpec.localDropOnly(harvestElement($element.toArray()[0]))) {
 		if(elSpec.canDropTo) { //remove the drop target from elements that are not the dragged element's parent
 			var droppers=$(".xonomy .elementDropper").toArray();
 			for(var i=0; i<droppers.length; i++) {
@@ -1479,11 +1487,11 @@ Xonomy.insertDropTargets=function(htmlID){
 		}
 	}
 	if(elSpec.mustBeBefore) { //remove the drop target from after elements it cannot be after
-		var jsElement=Xonomy.harvestElement($element.toArray()[0]);
+		var jsElement=harvestElement($element.toArray()[0]);
 		var droppers=$(".xonomy .elementDropper").toArray();
 		for(var i=0; i<droppers.length; i++) {
 			var dropper=droppers[i];
-			jsElement.internalParent=Xonomy.harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
+			jsElement.internalParent=harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
 			var mustBeBefore=elSpec.mustBeBefore(jsElement);
 			for(var ii=0; ii<mustBeBefore.length; ii++) {
 				if( $(dropper).prevAll("*[data-name='"+mustBeBefore[ii]+"']").toArray().length>0 ) {
@@ -1493,11 +1501,11 @@ Xonomy.insertDropTargets=function(htmlID){
 		}
 	}
 	if(elSpec.mustBeAfter) { //remove the drop target from before elements it cannot be before
-		var jsElement=Xonomy.harvestElement($element.toArray()[0]);
+		var jsElement=harvestElement($element.toArray()[0]);
 		var droppers=$(".xonomy .elementDropper").toArray();
 		for(var i=0; i<droppers.length; i++) {
 			var dropper=droppers[i];
-			jsElement.internalParent=Xonomy.harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
+			jsElement.internalParent=harvestElement(dropper.parentNode.parentNode); //pretend the element's parent is the dropper's parent
 			var mustBeAfter=elSpec.mustBeAfter(jsElement);
 			for(var ii=0; ii<mustBeAfter.length; ii++) {
 				if( $(dropper).nextAll("*[data-name='"+mustBeAfter[ii]+"']").toArray().length>0 ) {
@@ -1651,55 +1659,59 @@ Xonomy.setFocus=function(htmlID, what){
 	}
 };
 Xonomy.key=function(event){
-	if(!Xonomy.notKeyUp && !Xonomy.keyboardMenu(event) && !$("#xonomyBubble").length>0 && !event.shiftKey ) {
-		if(event.which==27) {
-			event.preventDefault();
-			event.stopImmediatePropagation();
-			Xonomy.destroyBubble(); //escape key
-		} else if(event.which==13){ //enter key
-			event.preventDefault();
-			event.stopImmediatePropagation();
-			if(Xonomy.currentFocus=="childrenCollapsed") Xonomy.plusminus(Xonomy.currentHtmlId, true);
-			if(Xonomy.currentFocus=="char") {
-				Xonomy.charClick($("#"+Xonomy.currentHtmlId)[0]);
-			}
-			else {
-				Xonomy.click(Xonomy.currentHtmlId, Xonomy.currentFocus);
-				Xonomy.clickoff();
-			}
-		} else if((event.ctrlKey || event.metaKey) && event.which==40) { //down key with Ctrl or Cmd (Mac OS)
-			event.preventDefault();
-			event.stopImmediatePropagation();
-			Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()+60 );
-		} else if((event.ctrlKey || event.metaKey) && event.which==38) { //up key with Ctrl or Cmd (Mac OS)
-			event.preventDefault();
-			event.stopImmediatePropagation();
-			Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()-60 );
-		} else if((event.ctrlKey || event.metaKey) && [37, 39].indexOf(event.which)>-1) { //arrow keys with Ctrl or Cmd (Mac OS)
-			event.preventDefault();
-			event.stopImmediatePropagation();
-			var $el=$("#"+Xonomy.currentHtmlId);
-			if($el.hasClass("element") && !$el.hasClass("uncollapsible")){
-				if(event.which==39 && $el.hasClass("collapsed")) { //expand it!
-					Xonomy.plusminus(Xonomy.currentHtmlId);
+	if(!Xonomy.notKeyUp) {
+		if(!event.shiftKey && !$("#xonomyBubble").length>0 ) {
+			if(event.which==27) { //escape key
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				Xonomy.destroyBubble();
+			} else if(event.which==13){ //enter key
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				if(Xonomy.currentFocus=="childrenCollapsed") Xonomy.plusminus(Xonomy.currentHtmlId, true);
+				if(Xonomy.currentFocus=="char") {
+					Xonomy.charClick($("#"+Xonomy.currentHtmlId)[0]);
 				}
-				if(event.which==37 && !$el.hasClass("collapsed")) { //collapse it!
-					Xonomy.plusminus(Xonomy.currentHtmlId);
+				else {
+					Xonomy.click(Xonomy.currentHtmlId, Xonomy.currentFocus);
+					Xonomy.clickoff();
+				}
+			} else if((event.ctrlKey || event.metaKey) && event.which==40) { //down key with Ctrl or Cmd (Mac OS)
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()+60 );
+			} else if((event.ctrlKey || event.metaKey) && event.which==38) { //up key with Ctrl or Cmd (Mac OS)
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				Xonomy.scrollableContainer.scrollTop( Xonomy.scrollableContainer.scrollTop()-60 );
+			} else if((event.ctrlKey || event.metaKey) && [37, 39].indexOf(event.which)>-1) { //arrow keys with Ctrl or Cmd (Mac OS)
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				var $el=$("#"+Xonomy.currentHtmlId);
+				if($el.hasClass("element") && !$el.hasClass("uncollapsible")){
+					if(event.which==39 && $el.hasClass("collapsed")) { //expand it!
+						Xonomy.plusminus(Xonomy.currentHtmlId);
+					}
+					if(event.which==37 && !$el.hasClass("collapsed")) { //collapse it!
+						Xonomy.plusminus(Xonomy.currentHtmlId);
+					}
+				}
+			} else if([37, 38, 39, 40].indexOf(event.which)>-1 && !event.altKey) { //arrow keys
+				event.preventDefault();
+				event.stopImmediatePropagation();
+				if(!Xonomy.currentHtmlId) { //nothing is current yet
+					Xonomy.setFocus($(".xonomy .element").first().prop("id"), "openingTagName");
+				} else if($(".xonomy .focused").length==0) { //something is current but nothing is focused yet
+					Xonomy.setFocus(Xonomy.currentHtmlId, Xonomy.currentFocus);
+				} else { //something is current, do arrow action
+					if(event.which==40) Xonomy.goDown(); //down key
+					if(event.which==38) Xonomy.goUp(); //up key
+					if(event.which==39) Xonomy.goRight(); //right key
+					if(event.which==37) Xonomy.goLeft(); //left key
 				}
 			}
-		} else if([37, 38, 39, 40].indexOf(event.which)>-1 && !event.altKey) { //arrow keys
-			event.preventDefault();
-			event.stopImmediatePropagation();
-			if(!Xonomy.currentHtmlId) { //nothing is current yet
-				Xonomy.setFocus($(".xonomy .element").first().prop("id"), "openingTagName");
-			} else if($(".xonomy .focused").length==0) { //something is current but nothing is focused yet
-				Xonomy.setFocus(Xonomy.currentHtmlId, Xonomy.currentFocus);
-			} else { //something is current, do arrow action
-				if(event.which==40) Xonomy.goDown(); //down key
-				if(event.which==38) Xonomy.goUp(); //up key
-				if(event.which==39) Xonomy.goRight(); //right key
-				if(event.which==37) Xonomy.goLeft(); //left key
-			}
+		} else if(!$("#xonomyBubble").length>0) {
+			Xonomy.keyboardMenu(event);
 		}
 	}
 	Xonomy.notKeyUp=false;
