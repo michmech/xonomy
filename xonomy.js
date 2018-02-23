@@ -1334,8 +1334,7 @@ Xonomy.editRaw=function(htmlID, parameter) {
 };
 Xonomy.duplicateElement=function(htmlID) {
 	Xonomy.clickoff();
-	var jsElement=Xonomy.harvestElement(document.getElementById(htmlID));
-	var html=Xonomy.renderElement(jsElement);
+	var html=document.getElementById(htmlID).outerHTML.replace(/ id=['"]/g, function(x){return x+"d_"});
 	var $html=$(html).hide();
 	$("#"+htmlID).after($html);
 	Xonomy.changed();
