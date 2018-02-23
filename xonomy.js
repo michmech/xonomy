@@ -397,6 +397,7 @@ Xonomy.refresh=function() {
 	});
 };
 
+Xonomy.harvestCache={};
 Xonomy.harvest=function() { //harvests the contents of an editor
 	//Returns xml-as-string.
 	var rootElement=$(".xonomy .element").first().toArray()[0];
@@ -412,33 +413,41 @@ Xonomy.harvest=function() { //harvests the contents of an editor
 	return Xonomy.js2xml(js);
 }
 Xonomy.harvestElement=function(htmlElement, jsParent) {
-	var js=new Xonomy.surrogate(jsParent);
-	js.type="element";
-	js.name=htmlElement.getAttribute("data-name");
-	js.htmlID=htmlElement.id;
-	js.attributes=[];
-	var htmlAttributes=$(htmlElement).find(".tag.opening > .attributes").toArray()[0];
-	for(var i=0; i<htmlAttributes.childNodes.length; i++) {
-		var htmlAttribute=htmlAttributes.childNodes[i];
-		if($(htmlAttribute).hasClass("attribute")) js["attributes"].push(Xonomy.harvestAttribute(htmlAttribute, js));
+	var htmlID=htmlElement.id;
+	if(!Xonomy.harvestCache[htmlID]) {
+		var js=new Xonomy.surrogate(jsParent);
+		js.type="element";
+		js.name=htmlElement.getAttribute("data-name");
+		js.htmlID=htmlElement.id;
+		js.attributes=[];
+		var htmlAttributes=$(htmlElement).find(".tag.opening > .attributes").toArray()[0];
+		for(var i=0; i<htmlAttributes.childNodes.length; i++) {
+			var htmlAttribute=htmlAttributes.childNodes[i];
+			if($(htmlAttribute).hasClass("attribute")) js["attributes"].push(Xonomy.harvestAttribute(htmlAttribute, js));
+		}
+		js.children=[];
+		var htmlChildren=$(htmlElement).children(".children").toArray()[0];
+		for(var i=0; i<htmlChildren.childNodes.length; i++) {
+			var htmlChild=htmlChildren.childNodes[i];
+			if($(htmlChild).hasClass("element")) js["children"].push(Xonomy.harvestElement(htmlChild, js));
+			else if($(htmlChild).hasClass("textnode")) js["children"].push(Xonomy.harvestText(htmlChild, js));
+		}
+		js=Xonomy.enrichElement(js);
+		Xonomy.harvestCache[htmlID]=js;
 	}
-	js.children=[];
-	var htmlChildren=$(htmlElement).children(".children").toArray()[0];
-	for(var i=0; i<htmlChildren.childNodes.length; i++) {
-		var htmlChild=htmlChildren.childNodes[i];
-		if($(htmlChild).hasClass("element")) js["children"].push(Xonomy.harvestElement(htmlChild, js));
-		else if($(htmlChild).hasClass("textnode")) js["children"].push(Xonomy.harvestText(htmlChild, js));
-	}
-	js=Xonomy.enrichElement(js);
-	return js;
+	return Xonomy.harvestCache[htmlID];
 };
 Xonomy.harvestAttribute=function(htmlAttribute, jsParent) {
-	var js = new Xonomy.surrogate(jsParent);
-	js.type = "attribute";
-	js.name = htmlAttribute.getAttribute("data-name");
-	js.htmlID = htmlAttribute.id;
-	js.value = htmlAttribute.getAttribute("data-value");
-	return js;
+	var htmlID=htmlAttribute.id;
+	if(!Xonomy.harvestCache[htmlID]) {
+		var js = new Xonomy.surrogate(jsParent);
+		js.type = "attribute";
+		js.name = htmlAttribute.getAttribute("data-name");
+		js.htmlID = htmlAttribute.id;
+		js.value = htmlAttribute.getAttribute("data-value");
+		Xonomy.harvestCache[htmlID]=js;
+	}
+	return Xonomy.harvestCache[htmlID];
 }
 
 Xonomy.surrogate=function(jsParent) {
@@ -1600,6 +1609,7 @@ Xonomy.recomputeLayby=function(){
 }
 
 Xonomy.changed=function(jsElement) { //called when the document changes
+	Xonomy.harvestCache={};
 	Xonomy.refresh();
 	Xonomy.validate();
 	Xonomy.docSpec.onchange(jsElement); //report that the document has changed
