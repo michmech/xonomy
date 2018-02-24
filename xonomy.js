@@ -682,7 +682,7 @@ Xonomy.chewText=function(txt) {
 		if(i==0 && t==" ") t="<span class='space'>&middot;</span>"; //leading space
 		if(i==txt.length-1 && t==" ") t="<span class='space'>&middot;</span>"; //trailing space
 		var id=Xonomy.nextID();
-		ret+="<span id='"+id+"' class='char focusable'>"+t+"<span class='selector'><span class='inside' onclick='Xonomy.charClick(this.parentNode.parentNode)'></span></span></span>";
+		ret+="<span id='"+id+"' class='char focusable' onclick='if((event.ctrlKey||event.metaKey) && $(this).closest(\".element\").hasClass(\"hasInlineMenu\")) Xonomy.charClick(this)'>"+t+"<span class='selector'><span class='inside' onclick='Xonomy.charClick(this.parentNode.parentNode)'></span></span></span>";
 		if(txt[i]==" ") ret+="<span class='word'>"; //start word
 	}
 	ret+="</span>"; //end word
