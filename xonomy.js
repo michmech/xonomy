@@ -713,7 +713,7 @@ Xonomy.charClick=function(c) {
 			//Show inline menu etc:
 			var htmlID=$element.attr("id");
 			var content=Xonomy.inlineMenu(htmlID); //compose bubble content
-			if(content!="") {
+			if(content!="" && content!="<div class='menu'></div>") {
 				document.body.appendChild(Xonomy.makeBubble(content)); //create bubble
 				Xonomy.showBubble($("#"+htmlID+" .char.on").last()); //anchor bubble to highlighted chars
 			}
@@ -830,7 +830,7 @@ Xonomy.click=function(htmlID, what) {
 		if(!isReadOnly && (what=="openingTagName" || what=="closingTagName") ) {
 			$("#"+htmlID).addClass("current"); //make the element current
 			var content=Xonomy.elementMenu(htmlID); //compose bubble content
-			if(content!="<div class='menu'></div>") {
+			if(content!="" && content!="<div class='menu'></div>") {
 				document.body.appendChild(Xonomy.makeBubble(content)); //create bubble
 				if(what=="openingTagName") Xonomy.showBubble($("#"+htmlID+" > .tag.opening > .name")); //anchor bubble to opening tag
 				if(what=="closingTagName") Xonomy.showBubble($("#"+htmlID+" > .tag.closing > .name")); //anchor bubble to closing tag
@@ -841,7 +841,7 @@ Xonomy.click=function(htmlID, what) {
 		if(!isReadOnly && what=="attributeName") {
 			$("#"+htmlID).addClass("current"); //make the attribute current
 			var content=Xonomy.attributeMenu(htmlID); //compose bubble content
-			if(content!="<div class='menu'></div>") {
+			if(content!="" && content!="<div class='menu'></div>") {
 				document.body.appendChild(Xonomy.makeBubble(content)); //create bubble
 				Xonomy.showBubble($("#"+htmlID+" > .name")); //anchor bubble to attribute name
 			}
@@ -856,7 +856,7 @@ Xonomy.click=function(htmlID, what) {
 			Xonomy.verifyDocSpecAttribute(elName, name);
 			var spec=Xonomy.docSpec.elements[elName].attributes[name];
 			var content=spec.asker(value, spec.askerParameter, Xonomy.harvestAttribute(document.getElementById(htmlID))); //compose bubble content
-			if(content!="") {
+			if(content!="" && content!="<div class='menu'></div>") {
 				document.body.appendChild(Xonomy.makeBubble(content)); //create bubble
 				Xonomy.showBubble($("#"+htmlID+" > .valueContainer > .value")); //anchor bubble to value
 				Xonomy.answer=function(val) {
@@ -878,7 +878,7 @@ Xonomy.click=function(htmlID, what) {
 			} else {
 				var content=spec.asker(value, spec.askerParameter, Xonomy.harvestElement($("#"+htmlID).closest(".element").toArray()[0])); //use specified asker
 			}
-			if(content!="<div class='menu'></div>") {
+			if(content!="" && content!="<div class='menu'></div>") {
 				document.body.appendChild(Xonomy.makeBubble(content)); //create bubble
 				Xonomy.showBubble($("#"+htmlID+" > .value")); //anchor bubble to value
 				Xonomy.answer=function(val) {
