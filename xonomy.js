@@ -261,6 +261,7 @@ Xonomy.verifyDocSpecElement=function(name) { //make sure the DocSpec object has 
 	for(var i=0; i<spec.menu.length; i++) Xonomy.verifyDocSpecMenuItem(spec.menu[i]);
 	for(var i=0; i<spec.inlineMenu.length; i++) Xonomy.verifyDocSpecMenuItem(spec.inlineMenu[i]);
 	for(var attributeName in spec.attributes) Xonomy.verifyDocSpecAttribute(name, attributeName);
+	spec.askerParameter=Xonomy.asFunction(spec.askerParameter, null);
 };
 Xonomy.verifyDocSpecAttribute=function(elementName, attributeName) { //make sure the DocSpec object has such an attribute, that the attribute has everything it needs
 	var elSpec=Xonomy.docSpec.elements[elementName];
@@ -274,6 +275,7 @@ Xonomy.verifyDocSpecAttribute=function(elementName, attributeName) { //make sure
 	}
 	var spec=elSpec.attributes[attributeName];
 	if(!spec.asker || typeof(spec.asker)!="function") spec.asker=function(){return ""};
+	spec.askerParameter=Xonomy.asFunction(spec.askerParameter, null);
 	if(!spec.menu || typeof(spec.menu)!="object") spec.menu=[];
 	spec.isReadOnly=Xonomy.asFunction(spec.isReadOnly, false);
 	spec.isInvisible=Xonomy.asFunction(spec.isInvisible, false);
@@ -857,7 +859,8 @@ Xonomy.click=function(htmlID, what) {
 			var elName=$("#"+htmlID).closest(".element").attr("data-name");
 			Xonomy.verifyDocSpecAttribute(elName, name);
 			var spec=Xonomy.docSpec.elements[elName].attributes[name];
-			var content=spec.asker(value, spec.askerParameter, Xonomy.harvestAttribute(document.getElementById(htmlID))); //compose bubble content
+			var jsMe=Xonomy.harvestAttribute(document.getElementById(htmlID));
+			var content=spec.asker(value, spec.askerParameter(jsMe), jsMe); //compose bubble content
 			if(content!="" && content!="<div class='menu'></div>") {
 				document.body.appendChild(Xonomy.makeBubble(content)); //create bubble
 				Xonomy.showBubble($("#"+htmlID+" > .valueContainer > .value")); //anchor bubble to value
@@ -878,7 +881,8 @@ Xonomy.click=function(htmlID, what) {
 			if (typeof(spec.asker) != "function") {
 				var content=Xonomy.askLongString(value, null, Xonomy.harvestElement($("#"+htmlID).closest(".element").toArray()[0])); //compose bubble content
 			} else {
-				var content=spec.asker(value, spec.askerParameter, Xonomy.harvestElement($("#"+htmlID).closest(".element").toArray()[0])); //use specified asker
+				var jsMe=Xonomy.harvestElement($("#"+htmlID).closest(".element").toArray()[0]);
+				var content=spec.asker(value, spec.askerParameter(jsMe), jsMe); //use specified asker
 			}
 			if(content!="" && content!="<div class='menu'></div>") {
 				document.body.appendChild(Xonomy.makeBubble(content)); //create bubble
