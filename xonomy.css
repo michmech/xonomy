@@ -256,7 +256,7 @@
 /*Plus-minus collapsor*/
 .xonomy.laic .element > .connector > .plusminus { background-image: url(minus.gif); background-position: center center; background-repeat: no-repeat; width: 1rem; height: 1rem; background-color: #dddddd; position: absolute; top: 20px; left: -30px; cursor: pointer; }
 .xonomy.laic .element.oneliner > .connector > .plusminus { top: 1px; }
-.xonomy.laic .element.hasInlineMenu .element .connector > .plusminus { position: relative; top: auto; left: auto; display: inline-block; margin-right: 3px; }
+.xonomy.laic .element.hasInlineMenu.hasText .element .connector > .plusminus { position: relative; top: auto; left: auto; display: inline-block; margin-right: 3px; }
 
 /*Collapsed elements*/
 .xonomy.laic .element.collapsed > .connector > .plusminus { background-image: url(plus.gif); }
@@ -264,7 +264,7 @@
 .xonomy.laic .element.hasText .element.oneliner.collapsed > .tag { display: none; }
 
 /*The "collapsoid" (= rectangle that hides collapsed stuff)*/
-.xonomy.laic .element > .childrenCollapsed { display: none; color: #999999; padding: 1px 5px; cursor: pointer; font-family: monospace; font-size: 0.85rem; z-index: 9; text-shadow: 0px 0px 2px #ffffff;}
+.xonomy.laic .element > .childrenCollapsed { display: none; color: #999999; padding: 1px 10px; cursor: pointer; font-family: monospace; font-size: 0.85rem; z-index: 9; text-shadow: 0px 0px 2px #ffffff;}
 .xonomy.laic .element.collapsed > .childrenCollapsed { display: block; margin-top: 5px; }
 .xonomy.laic .element.collapsed > .childrenCollapsed:hover { background-color: #f4f4f4; }
 
@@ -286,25 +286,25 @@
 .xonomy.laic .element.uncollapsible > .childrenCollapsed { display: none !important; }
 
 .xonomy.laic .element.hasText .element {border: 0px; }
-.xonomy.laic .element.hasInlineMenu > .children {background-color: #ffffff; padding: 7px 10px 0px 40px; line-height: 2.5em; }
-.xonomy.laic .element.hasInlineMenu .element {display: inline; margin-top: 0px;}
-.xonomy.laic .element.hasInlineMenu .element > .tag.opening {display: inline; background-color: #eeeeee; border-radius: 20px 0px 0px 20px; margin: 0px 2px 0px 2px; padding: 2px 0px 2px 5px; }
-.xonomy.laic .element.hasInlineMenu .element > .tag.closing {display: inline; background-color: #eeeeee; border-radius: 0px 20px 20px 0px; margin: 0px 2px 0px 2px; padding: 2px 5px 2px 0px;}
-.xonomy.laic .element.hasInlineMenu .element > .tag.opening > .name {margin-right: 5px;}
-.xonomy.laic .element.hasInlineMenu .element > .tag.closing > .name {margin-left: 5px;}
-.xonomy.laic .element.hasInlineMenu .element > .tag.opening > .attributes > .attribute { margin-left: 0.25em; padding-left: 0.25em; padding-right: 0.5em !important; }
-.xonomy.laic .element.hasInlineMenu .element > .children {display: inline; }
-.xonomy.laic .element.hasInlineMenu .textnode {display: inline; border: 0px; margin: 0px; padding: 0px; }
-.xonomy.laic .element.hasInlineMenu .textnode .value {display: inline; xborder: 0px; padding: 4px 0px; }
-.xonomy.laic .element.hasInlineMenu .element .textnode .value {display: inline; xborder: 0px; padding: 6px 0px; }
-.xonomy.laic .element.hasInlineMenu .element .children {border: 0px; padding: 0px;}
-.xonomy.laic .element.hasInlineMenu .element .childrenCollapsed { display: none; position: relative; top: auto; right: auto; }
-.xonomy.laic .element.hasInlineMenu .element.collapsed .childrenCollapsed {display: inline;}
-.xonomy.laic .element.hasInlineMenu .element > .connector > .plusminus { top: 3px; }
-.xonomy.laic .element.hasInlineMenu .element .name {padding: 2px 5px; }
-.xonomy.laic .element.hasInlineMenu .element > .tag.opening .attribute .name {  }
-.xonomy.laic .element.hasInlineMenu .element > .tag.opening .attribute .valueContainer { padding: 0px 5px !important; margin-left: 0px; }
-.xonomy.laic .element.hasInlineMenu .children > .textnode { margin-top: 0px; }
+.xonomy.laic .element.hasInlineMenu.hasText > .children {background-color: #ffffff; padding: 7px 10px 0px 40px; line-height: 2.5em; }
+.xonomy.laic .element.hasInlineMenu.hasText .element {display: inline; margin-top: 0px;}
+.xonomy.laic .element.hasInlineMenu.hasText .element > .tag.opening {display: inline; background-color: #eeeeee; border-radius: 20px 0px 0px 20px; margin: 0px 2px 0px 2px; padding: 2px 0px 2px 5px; }
+.xonomy.laic .element.hasInlineMenu.hasText .element > .tag.closing {display: inline; background-color: #eeeeee; border-radius: 0px 20px 20px 0px; margin: 0px 2px 0px 2px; padding: 2px 5px 2px 0px;}
+.xonomy.laic .element.hasInlineMenu.hasText .element > .tag.opening > .name {margin-right: 5px;}
+.xonomy.laic .element.hasInlineMenu.hasText .element > .tag.closing > .name {margin-left: 5px;}
+.xonomy.laic .element.hasInlineMenu.hasText .element > .tag.opening > .attributes > .attribute { margin-left: 0.25em; padding-left: 0.25em; padding-right: 0.5em !important; }
+.xonomy.laic .element.hasInlineMenu.hasText .element > .children {display: inline; }
+.xonomy.laic .element.hasInlineMenu.hasText .textnode {display: inline; border: 0px; margin: 0px; padding: 0px; }
+.xonomy.laic .element.hasInlineMenu.hasText .textnode .value {display: inline; xborder: 0px; padding: 4px 0px; }
+.xonomy.laic .element.hasInlineMenu.hasText .element .textnode .value {display: inline; xborder: 0px; padding: 6px 0px; }
+.xonomy.laic .element.hasInlineMenu.hasText .element .children {border: 0px; padding: 0px;}
+.xonomy.laic .element.hasInlineMenu.hasText .element .childrenCollapsed { display: none; position: relative; top: auto; right: auto; }
+.xonomy.laic .element.hasInlineMenu.hasText .element.collapsed .childrenCollapsed {display: inline;}
+.xonomy.laic .element.hasInlineMenu.hasText .element > .connector > .plusminus { top: 3px; }
+.xonomy.laic .element.hasInlineMenu.hasText .element .name {padding: 2px 5px; }
+.xonomy.laic .element.hasInlineMenu.hasText .element > .tag.opening .attribute .name {  }
+.xonomy.laic .element.hasInlineMenu.hasText .element > .tag.opening .attribute .valueContainer { padding: 0px 5px !important; margin-left: 0px; }
+.xonomy.laic .element.hasInlineMenu.hasText .children > .textnode { margin-top: 0px; }
 
 /*Clickable items: hover state*/
 .xonomy.laic .element > .tag > .name:hover { color: #6385bf; }

@@ -298,13 +298,24 @@ Xonomy.lastIDNum=0;
 
 Xonomy.docSpec=null;
 Xonomy.refresh=function() {
-	$(".xonomy .textnode[data-value='']").each(function(){ //delete empty text nodes if the parent element is not allowed to have text
+	//$(".xonomy .textnode[data-value='']").each(function(){ //delete empty text nodes if the parent element is not allowed to have text
+	$(".xonomy .textnode").each(function(){ //delete empty text nodes if the parent element is not allowed to have text
 		var $this=$(this);
 		var $parent=$this.closest(".element");
 		var parentName=$parent.data("name");
 		var elSpec=Xonomy.docSpec.elements[parentName];
 		if(elSpec && !elSpec.hasText(Xonomy.harvestElement($parent.toArray()[0]))) {
-			$this.remove();
+			if($this.attr("data-value")==""){
+				$this.remove();
+			} else {
+				var origText=$this.attr("data-value");
+				var trimmedText=origText.trim();
+				if(trimmedText!=origText){
+					var jsText = {type: "text", value: trimmedText};
+					var html=Xonomy.renderText(jsText);
+					$this.replaceWith(html);
+				}
+			}
 		}
 	});
 	$(".xonomy .children ").each(function(){ //determine whether each element does or doesn't have children:
@@ -891,9 +902,25 @@ Xonomy.click=function(htmlID, what) {
 					var obj=document.getElementById(htmlID);
 					var jsText = {type: "text", value: val};
 					var html=Xonomy.renderText(jsText);
+					{
+						var prevHtmlId=$(obj).prev(".element").prop("id")
+						var prevWhat="closingTagName";
+						if(!prevHtmlId){
+							prevHtmlId=$(obj).closest(".element").prop("id");
+							prevWhat="openingTagName";
+						}
+					}
 					$(obj).replaceWith(html);
 					Xonomy.changed(Xonomy.harvestText(document.getElementById(jsText.htmlID)));
-					window.setTimeout(function(){Xonomy.clickoff(); Xonomy.setFocus($(html).prop("id"), what)}, 100);
+					window.setTimeout(function(){
+						var id=$(html).prop("id");
+						Xonomy.clickoff();
+						if($("#"+id).length>0){
+							Xonomy.setFocus($(html).prop("id"), what);
+						} else {
+							Xonomy.setFocus(prevHtmlId, prevWhat);
+						}
+					}, 100);
 				};
 			}
 		}
