@@ -440,6 +440,11 @@ Xonomy.harvestElement=function(htmlElement, jsParent) {
 			if($(htmlAttribute).hasClass("attribute")) js["attributes"].push(Xonomy.harvestAttribute(htmlAttribute, js));
 		}
 		js.children=[];
+		var htmlChildren=$(htmlElement).children(".prominentChildren").toArray()[0];
+		for(var i=0; i<htmlChildren.childNodes.length; i++) {
+			var htmlChild=htmlChildren.childNodes[i];
+			js["children"].push(Xonomy.harvestElement(htmlChild, js));
+		}
 		var htmlChildren=$(htmlElement).children(".children").toArray()[0];
 		for(var i=0; i<htmlChildren.childNodes.length; i++) {
 			var htmlChild=htmlChildren.childNodes[i];
@@ -585,6 +590,16 @@ Xonomy.renderElement=function(element) {
 			html+='<span class="punc slash">/</span>';
 			html+='<span class="punc">&gt;</span>';
 		html+='</span>';
+		if(!spec.oneliner(element)){
+			html+="<span class='prominentChildren'>";
+			for(var i=0; i<element.children.length; i++) {
+				var child=element.children[i];
+				if(child.type=="element"){ //element node
+					if(spec.prominentChildren && spec.prominentChildren.indexOf(child.name)>-1) html+=Xonomy.renderElement(child);
+				}
+			}
+			html+="</span>";
+		}
 		if(spec.caption && !spec.oneliner(element)) html+="<span class='inlinecaption'>"+Xonomy.textByLang(spec.caption(element))+"</span>";
 		html+='<span class="childrenCollapsed focusable" onclick="Xonomy.plusminus(\''+htmlID+'\', true)">&middot;&middot;&middot;</span>';
 		html+='<div class="children">';
@@ -601,7 +616,9 @@ Xonomy.renderElement=function(element) {
 						html+=Xonomy.renderText({type: "text", value: ""}); //if inline layout, insert empty text node between two elements
 					}
 					if(child.type=="text") html+=Xonomy.renderText(child); //text node
-					else if(child.type=="element") html+=Xonomy.renderElement(child); //element node
+					else if(child.type=="element"){ //element node
+						if(!spec.prominentChildren || spec.prominentChildren.indexOf(child.name)==-1) html+=Xonomy.renderElement(child);
+					}
 					prevChildType=child.type;
 				}
 				if(hasText && element.children.length>1 && element.children[element.children.length-1].type=="element") {
@@ -615,6 +632,16 @@ Xonomy.renderElement=function(element) {
 			html+='<span class="name" onclick="Xonomy.click(\''+htmlID+'\', \'closingTagName\')">'+displayName+'</span>';
 			html+='<span class="punc">&gt;</span>';
 		html+='</span>';
+		if(spec.oneliner(element)){
+			html+="<span class='prominentChildren'>";
+			for(var i=0; i<element.children.length; i++) {
+				var child=element.children[i];
+				if(child.type=="element"){ //element node
+					if(spec.prominentChildren && spec.prominentChildren.indexOf(child.name)>-1) html+=Xonomy.renderElement(child);
+				}
+			}
+			html+="</span>";
+		}
 		if(spec.caption && spec.oneliner(element)) html+="<span class='inlinecaption'>"+Xonomy.textByLang(spec.caption(element))+"</span>";
 	html+='</div>';
 	element.htmlID = htmlID;
@@ -1853,14 +1880,15 @@ Xonomy.goDown=function(){
 		$candidates=$candidates.not(".char").add($el);
 		if(Xonomy.currentFocus=="openingTagName" && $el.hasClass("oneliner")) $candidates=$candidates.not("#"+Xonomy.currentHtmlId+" .tag.closing").not("#"+Xonomy.currentHtmlId+" .children *");
 		if(Xonomy.currentFocus=="openingTagName" && $el.hasClass("oneliner")) $candidates=$candidates.not("#"+Xonomy.currentHtmlId+" .textnode");
+		if(Xonomy.currentFocus=="openingTagName") $candidates=$candidates.not(".prominentChildren *");
 		if($el.hasClass("collapsed")) $candidates=$candidates.not("#"+Xonomy.currentHtmlId+" .tag.closing");
-		if($el.hasClass("textnode") && $(".xonomy").hasClass("nerd")) var $candidates=$el.closest(".element").find(".tag.closing").last();
+		if($el.hasClass("textnode") && $el.closest(".prominentChildren").length==0 && $(".xonomy").hasClass("nerd")) var $candidates=$el.closest(".element").find(".tag.closing:visible").last();
 		if($el.hasClass("textnode") && $(".xonomy").hasClass("laic")) var $candidates=$el.closest(".element").next().find(".focusable:visible").first();
 
 		var $next=$candidates.eq( $candidates.index($me[0])+1 );
 		if($next.hasClass("opening")) Xonomy.setFocus($next.closest(".element").prop("id"), "openingTagName");
-		if($next.hasClass("closing")) Xonomy.setFocus($next.closest(".element").prop("id"), "closingTagName");
-		if($next.hasClass("textnode")) Xonomy.setFocus($next.prop("id"), "text");
+		else if($next.hasClass("closing")) Xonomy.setFocus($next.closest(".element").prop("id"), "closingTagName");
+		else if($next.hasClass("textnode")) Xonomy.setFocus($next.prop("id"), "text");
 	}
 };
 Xonomy.goUp=function(){
@@ -1878,18 +1906,20 @@ Xonomy.goUp=function(){
 		$candidates=$candidates.not(".element .collapsed .tag.closing");
 		$candidates=$candidates.not(".char");
 		if($el.hasClass("char")) var $candidates=$el.closest(".textnode").first().add($el);
-		if($el.hasClass("textnode")) var $candidates=$el.closest(".element").find(".tag.opening").first().add($el);
+		if($el.hasClass("textnode") && $el.closest(".prominentChildren").length>0) $candidates=$candidates.add(".xonomy .prominentChildren .textnode");
+		if($el.hasClass("textnode") && $el.closest(".prominentChildren").length==0) $candidates=$el.closest(".element").find(".tag.opening").first().add($el);
 		if($me.hasClass("closing") && $el.hasClass("hasText")) $candidates=$candidates.not("#"+Xonomy.currentHtmlId+" .children *:not(:first-child)");
 		if($me.hasClass("opening") && $el.closest(".element").prev().hasClass("hasText")) {
 			var siblingID=$el.closest(".element").prev().prop("id");
 			$candidates=$candidates.not("#"+siblingID+" .children *:not(:first-child)");
 		}
+		$candidates=$candidates.add($me);
 
 		if($candidates.index($me[0])>0) {
 			var $next=$candidates.eq( $candidates.index($me[0])-1 );
 			if($next.hasClass("opening")) Xonomy.setFocus($next.closest(".element").prop("id"), "openingTagName");
-			if($next.hasClass("closing")) Xonomy.setFocus($next.closest(".element").prop("id"), "closingTagName");
-			if($next.hasClass("textnode")) Xonomy.setFocus($next.prop("id"), "text");
+			else if($next.hasClass("closing")) Xonomy.setFocus($next.closest(".element").prop("id"), "closingTagName");
+			else if($next.hasClass("textnode")) Xonomy.setFocus($next.prop("id"), "text");
 		}
 	}
 };
@@ -1900,7 +1930,7 @@ Xonomy.goRight=function(){
 	if(Xonomy.currentFocus=="closingTagName") var $me=$el.find(".tag.closing").last();
 	if(Xonomy.currentFocus=="attributeName") var $me=$el.find(".attributeName").first();
 	if(Xonomy.currentFocus=="attributeValue") var $me=$el.find(".attributeValue").first();
-	if(Xonomy.currentFocus=="childrenCollapsed") var $me=$el.find(".childrenCollapsed").first();
+	if(Xonomy.currentFocus=="childrenCollapsed") var $me=$el.find(".childrenCollapsed").not(".prominentChildren *").first();
 	if(Xonomy.currentFocus=="rollouter") var $me=$el.find(".rollouter").first();
 
 	var $candidates=$(".xonomy .focusable:visible");
@@ -1923,11 +1953,12 @@ Xonomy.goLeft=function(){
 	if(Xonomy.currentFocus=="closingTagName") var $me=$el.find(".tag.closing").last();
 	if(Xonomy.currentFocus=="attributeName") var $me=$el.find(".attributeName").first();
 	if(Xonomy.currentFocus=="attributeValue") var $me=$el.find(".attributeValue").first();
-	if(Xonomy.currentFocus=="childrenCollapsed") var $me=$el.find(".childrenCollapsed").first();
+	if(Xonomy.currentFocus=="childrenCollapsed") var $me=$el.find(".childrenCollapsed").not(".prominentChildren *").first();
 	if(Xonomy.currentFocus=="rollouter") var $me=$el.find(".rollouter").first();
 
 	var $candidates=$(".xonomy .focusable:visible");
 	$candidates=$candidates.not(".char").add(".hasInlineMenu > .children > .textnode .char:visible");
+	$candidates=$candidates.add($me);
 
 	var $next=$candidates.eq( $candidates.index($me[0])-1 );
 	if($next.hasClass("attributeName")) Xonomy.setFocus($next.closest(".attribute").prop("id"), "attributeName");

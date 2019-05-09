@@ -466,3 +466,20 @@
 .xonomy.laic div.layby > div.content > .element {margin-left: 35px;}
 .xonomy.laic div.layby > div.content .children {background-color: transparent !important;}
 .xonomy.laic div.layby > div.content .textnode > .value {background-color: transparent !important;}
+
+/**/
+
+.xonomy.nerd .prominentChildren:empty {display: none !important;}
+.xonomy.nerd .element > .prominentChildren {margin-left: 0.25em; }
+.xonomy.nerd .element > .prominentChildren > .element {display: inline; margin-right: 0.25em; padding: 5px 10px; background-color: #f3f3f3; border-radius: 2px;}
+.xonomy.nerd .element > .prominentChildren > .element > .tag {display: none;}
+.xonomy.nerd .element > .prominentChildren > .element > .connector {display: none;}
+
+.xonomy.laic .prominentChildren:empty {display: none !important;}
+.xonomy.laic .element > .prominentChildren { display: block; padding: 5px; }
+.xonomy.laic .element.oneliner > .prominentChildren { display: inline; margin-left: 1em; margin-right: 4px;}
+.xonomy.laic .element > .prominentChildren > .element {display: inline; margin-left: 0.5em;}
+.xonomy.laic .element > .prominentChildren > .element > .tag {display: none;}
+.xonomy.laic .element > .prominentChildren > .element > .connector {display: none;}
+
+.xonomy.nerd .name .displayName {font-style: italic;}
