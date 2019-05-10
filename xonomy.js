@@ -846,7 +846,7 @@ Xonomy.updateCollapsoid=function(htmlID) {
 		whisper=spec.collapsoid(Xonomy.harvestElement($element.toArray()[0]));
 	} else {
 		var abbreviated=false;
-		$element.find(".textnode").each(function(){
+		$element.find(".textnode").not(".prominentChildren *").each(function(){
 			var txt=Xonomy.harvestText(this).value;
 			for(var i=0; i<txt.length; i++) {
 				if(whisper.length<35) whisper+=txt[i]; else abbreviated=true;
