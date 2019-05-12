@@ -1079,7 +1079,7 @@ Xonomy.showBubble=function($anchor) {
 };
 
 Xonomy.askString=function(defaultString, askerParameter, jsMe) {
-	var width=($("body").width()*.5)-75
+	var width=($("body").width()*.4)-75
 	var html="";
 	html+="<form onsubmit='Xonomy.answer(this.val.value); return false'>";
 		html+="<input name='val' class='textbox focusme' style='width: "+width+"px;' value='"+Xonomy.xmlEscape(defaultString)+"' onkeyup='Xonomy.notKeyUp=true'/>";
