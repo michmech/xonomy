@@ -855,7 +855,7 @@ Xonomy.updateCollapsoid=function(htmlID) {
 			}
 			whisper+=" ";
 		});
-		whisper=whisper.replace(/  +/g, " ").replace(/ +$/g, "");
+		whisper=whisper.replace(/  +/g, " ").replace(/ +$/g, "").replace(/^ +/g, "");
 		if(abbreviated && !$element.hasClass("oneliner") && whisper!="...") whisper+="...";
 	}
 	if(whisper=="" || !whisper) whisper="...";
