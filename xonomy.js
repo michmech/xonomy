@@ -1181,11 +1181,11 @@ Xonomy.pickerMenu=function(picklist, defaultString){
 
 Xonomy.wycLastID=0;
 Xonomy.wycCache={};
-Xonomy.wyc=function(url, callback){ //a "when-you-can" function for delayed rendering: gets json from url, passes it to callback, and delayed-returns html-as-string from callback
+Xonomy.wyc=function(url, callback, method){ //a "when-you-can" function for delayed rendering: gets json from url, passes it to callback, and delayed-returns html-as-string from callback
 	Xonomy.wycLastID++;
 	var wycID="xonomy_wyc_"+Xonomy.wycLastID;
 	if(Xonomy.wycCache[url]) return callback(Xonomy.wycCache[url]);
-	$.ajax({url: url, dataType: "json", method: "POST"}).done(function(data){
+	$.ajax({url: url, dataType: "json", method: method || "POST"}).done(function(data){
 			$("#"+wycID).replaceWith(callback(data));
 			Xonomy.wycCache[url]=data;
 	});
