@@ -1181,14 +1181,28 @@ Xonomy.pickerMenu=function(picklist, defaultString){
 
 Xonomy.wycLastID=0;
 Xonomy.wycCache={};
+Xonomy.wycQueue=[];
+Xonomy.wycIsRunning=false;
 Xonomy.wyc=function(url, callback){ //a "when-you-can" function for delayed rendering: gets json from url, passes it to callback, and delayed-returns html-as-string from callback
 	Xonomy.wycLastID++;
 	var wycID="xonomy_wyc_"+Xonomy.wycLastID;
 	if(Xonomy.wycCache[url]) return callback(Xonomy.wycCache[url]);
-	$.ajax({url: url, dataType: "json", method: "POST"}).done(function(data){
-			$("#"+wycID).replaceWith(callback(data));
-			Xonomy.wycCache[url]=data;
+	Xonomy.wycQueue.push(function(){ //push job to WYC queue
+		Xonomy.wycIsRunning=true;
+		Xonomy.wycQueue.shift(); //remove myself from the WYC queue
+		if(Xonomy.wycCache[url]){
+			$("#"+wycID).replaceWith(callback(Xonomy.wycCache[url]));
+			if(Xonomy.wycQueue.length>0) Xonomy.wycQueue[0](); else Xonomy.wycIsRunning=false; //run the next WYC job, or say that WYC has finished running
+		} else {
+			$.ajax({url: url, dataType: "json", method: "POST"}).done(function(data){
+					$("#"+wycID).replaceWith(callback(data));
+					if(Xonomy.wycCache.length>1000) Xonomy.wycCache.length=[];
+					Xonomy.wycCache[url]=data;
+					if(Xonomy.wycQueue.length>0) Xonomy.wycQueue[0](); else Xonomy.wycIsRunning=false; //run the next WYC job, or say that WYC has finished running
+			});
+		}
 	});
+	if(!Xonomy.wycIsRunning && Xonomy.wycQueue.length>0) Xonomy.wycQueue[0]();
 	return "<span class='wyc' id='"+wycID+"'></span>";
 };
 
