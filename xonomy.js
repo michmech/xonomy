@@ -1424,9 +1424,9 @@ Xonomy.editRaw=function(htmlID, parameter) {
 Xonomy.duplicateElement=function(htmlID) {
 	Xonomy.clickoff();
 	var html=document.getElementById(htmlID).outerHTML;
-		  html=html.replace(/ id=['"]/g, function(x){return x+"d_"});
-		  html=html.replace(/Xonomy\.click\(['"]/g, function(x){return x+"d_"});
-		  html=html.replace(/Xonomy\.plusminus\(['"]/g, function(x){return x+"d_"});
+		  html=html.replace(/ id=['"]/g, function(x){return x+Xonomy.nextID()+"_"});
+		  html=html.replace(/Xonomy\.click\(['"]/g, function(x){return x+Xonomy.nextID()+"_"});
+		  html=html.replace(/Xonomy\.plusminus\(['"]/g, function(x){return x+Xonomy.nextID()+"_"});
 	var $html=$(html).hide();
 	$("#"+htmlID).after($html);
 	Xonomy.changed();
