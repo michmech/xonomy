@@ -917,7 +917,6 @@ Xonomy.click=function(htmlID, what) {
 			$("#"+htmlID).addClass("current");
 			var value=$("#"+htmlID).attr("data-value"); //obtain current value
 			var elName=$("#"+htmlID).closest(".element").attr("data-name");
-			console.log(elName);
 			var spec=Xonomy.docSpec.elements[elName];
 			if (typeof(spec.asker) != "function") {
 				var content=Xonomy.askLongString(value, null, Xonomy.harvestElement($("#"+htmlID).closest(".element").toArray()[0])); //compose bubble content
