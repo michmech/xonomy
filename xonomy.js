@@ -262,6 +262,7 @@ Xonomy.verifyDocSpecElement=function(name) { //make sure the DocSpec object has 
 	for(var i=0; i<spec.inlineMenu.length; i++) Xonomy.verifyDocSpecMenuItem(spec.inlineMenu[i]);
 	for(var attributeName in spec.attributes) Xonomy.verifyDocSpecAttribute(name, attributeName);
 	spec.askerParameter=Xonomy.asFunction(spec.askerParameter, null);
+	spec.prominentChildren=Xonomy.asFunction(spec.prominentChildren, []);
 };
 Xonomy.verifyDocSpecAttribute=function(elementName, attributeName) { //make sure the DocSpec object has such an attribute, that the attribute has everything it needs
 	var elSpec=Xonomy.docSpec.elements[elementName];
@@ -597,7 +598,7 @@ Xonomy.renderElement=function(element) {
 			for(var i=0; i<element.children.length; i++) {
 				var child=element.children[i];
 				if(child.type=="element"){ //element node
-					if(spec.prominentChildren && spec.prominentChildren.indexOf(child.name)>-1) html+=Xonomy.renderElement(child);
+					if(spec.prominentChildren && spec.prominentChildren(element).indexOf(child.name)>-1) html+=Xonomy.renderElement(child);
 				}
 			}
 			html+="</span>";
@@ -619,7 +620,7 @@ Xonomy.renderElement=function(element) {
 					}
 					if(child.type=="text") html+=Xonomy.renderText(child); //text node
 					else if(child.type=="element"){ //element node
-						if(!spec.prominentChildren || spec.prominentChildren.indexOf(child.name)==-1) html+=Xonomy.renderElement(child);
+						if(!spec.prominentChildren || spec.prominentChildren(element).indexOf(child.name)==-1) html+=Xonomy.renderElement(child);
 					}
 					prevChildType=child.type;
 				}
@@ -639,7 +640,7 @@ Xonomy.renderElement=function(element) {
 			for(var i=0; i<element.children.length; i++) {
 				var child=element.children[i];
 				if(child.type=="element"){ //element node
-					if(spec.prominentChildren && spec.prominentChildren.indexOf(child.name)>-1) html+=Xonomy.renderElement(child);
+					if(spec.prominentChildren && spec.prominentChildren(element).indexOf(child.name)>-1) html+=Xonomy.renderElement(child);
 				}
 			}
 			html+="</span>";
@@ -848,7 +849,8 @@ Xonomy.updateCollapsoid=function(htmlID) {
 		whisper=spec.collapsoid(Xonomy.harvestElement($element.toArray()[0]));
 	} else {
 		var abbreviated=false;
-		$element.find(".textnode").not(".prominentChildren *").each(function(){
+//		$element.find(".textnode").not(".prominentChildren *").each(function(){
+		$element.find(".textnode").not($element.find("> .prominentChildren *")).each(function(){
 			var txt=Xonomy.harvestText(this).value;
 			for(var i=0; i<txt.length; i++) {
 				if(whisper.length<35) whisper+=txt[i]; else abbreviated=true;
